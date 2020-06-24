@@ -1,0 +1,68 @@
+{%  extends 'accounts/main.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<br>
+<div class="container">
+	<div class="card">
+		<div class="card-header">
+			<h2>Product List</h2>
+		</div>
+	</div>
+</div>
+
+<div class=container>
+	<div class="coolo">
+		<div class="form-group col-md-10 mb-9">
+			<form method="get">
+				{% csrf_token %}
+				{{myFilter2.form | crispy}}
+
+				<a class="btn btn-primary" name='new_product' href="{% url 'new_product_profile' %}"
+					role="button">NEW</a>
+		</div>
+	</div>
+</div>
+
+
+<div class=container>
+	<div class="card card-body">
+		<table class="table">
+			<tr>
+				<th>SKU</th>
+				<th>Product Name</th>
+				<th>Number of Items Ordered</th>
+				<th>Edit Product</th>
+				<th>Delete Product</th>
+				<th>Upload Picture</th>
+
+			</tr>
+
+			{% for i in product_list %}
+
+
+
+			<tr>
+				<td>{{i.product_sku}}</td>
+				<td>{{i.name}} </td>
+				<td>{{i.norders}}</td>
+
+				<td><a class="btn btn-sm btn-info" name="edit_product"
+						href="{% url 'edit_product_profile' i.id %}">Edit</a>
+				</td>
+				<td><a class="btn btn-sm btn-danger" href="{% url 'delete_product_profile' i.id %}">Delete</a></td>
+				<td><a class="btn btn-sm btn-secondary" href="{% url 'product_picture' i.id %}">Pictures</a></td>
+
+			</tr>
+
+			{% endfor %}
+
+		</table>
+	</div>
+</div>
+</div>
+</div>
+
+{% endblock content %}

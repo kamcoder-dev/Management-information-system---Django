@@ -1,0 +1,74 @@
+{%  extends 'accounts/main.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+		<br>
+
+		<div class="row">
+			<div class="col-md">
+				<div class="card card-body">
+					<h5>Customer List</h5>
+				</div>
+
+
+<div class="coolo">
+	<div class="form-group col-md-5 mb-10" >
+		<form method="get">
+			{% csrf_token %}
+			{{myFilter1.form | crispy}}
+
+			<a class="btn btn-primary" name = 'new_customer' href="{% url 'new_customer_profile' %}" role="button">NEW</a>
+	 </div>
+</div>
+
+
+				<div class="card card-body">
+					<table class="table">
+						<tr>
+							<th>Customer UUID</th>
+							<th>Full name</th>
+							<th>Email Address</th>
+							<th>Last Purchased</th>
+							<th>Edit Customer</th>
+							<th>Delete Customer</th>
+							<th>Billing Address</th>
+
+						</tr>
+
+
+						{% for d in customer_list %}
+
+
+
+							<tr>
+								<td>{{d.customer_uuid}} </td>
+								<td>{{d.first_name}} {{d.middle_name}} {{d.last_name}}</td>
+								<td>{{d.user.email}}</td>
+			          <td>{{d.latest}}</td>
+								<td><a class="btn btn-sm btn-info" name= "edit_customer" href="{% url 'customer_profile' d.id %}">Edit</a></td>
+								<td><a class="btn btn-sm btn-danger" href="{% url 'delete_profile' d.id %}">Delete</a></td>
+								<td><a class="btn btn-sm btn-secondary" href="{% url 'address_customer' d.id %}">Address</a></td>
+							</tr>
+
+							{% endfor %}
+
+
+
+
+
+
+
+
+
+
+
+
+					</table>
+				</div>
+			</div>
+
+		</div>
+
+{% endblock content %}

@@ -1,0 +1,61 @@
+{%  extends 'accounts/main.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+		<br>
+
+		<div class="row">
+			<div class="col-md">
+				<div class="card card-body">
+					<h5>Orders List</h5>
+				</div>
+
+
+<div class="coolo">
+	<div class="form-group col-md-5 mb-10" >
+		<form method="get">
+
+			{% csrf_token %}
+			{{myFilter3.form | crispy}}
+
+			<a class="btn btn-primary" name = 'new_order' href="{% url 'new_order' %}" role="button">NEW</a>
+	 </div>
+</div>
+
+				<div class="card card-body">
+					<table class="table">
+						<tr>
+
+							<th>Product Name</th>
+              <th>Customer Name</th>
+							<th>Status</th>
+							<th>Edit Order</th>
+							<th>Delete Order</th>
+
+
+						</tr>
+
+            {% for i in order_list %}
+
+							<tr>
+								<td>{{i.product.name}} </td>
+								<td>{{i.customer.first_name}} {{i.customer.middle_name}} {{i.customer.last_name}}</td>
+                <td>{{i.status}}</td>
+
+								<td><a class="btn btn-sm btn-info" name= "edit_order" href="{% url 'edit_order' i.id %}">Edit</a></td>
+								<td><a class="btn btn-sm btn-danger" href="{% url 'delete_order' i.id %}">Delete</a></td>
+
+
+							</tr>
+
+							{% endfor %}
+
+					</table>
+				</div>
+			</div>
+
+		</div>
+
+{% endblock content %}

@@ -1,0 +1,46 @@
+{%  extends 'accounts/main.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+
+<div class="row">
+  <div class="col-md-8">
+    <div class="card card-body">
+      <h5>Customer Profile</h5>
+    </div>
+
+    <div class="card text-center text-black  mb-5" id="total-orders">
+        <div class="card-header">
+          <h5 class="card-title">Number of Items Ordered: {{order_customer_total}}</h5>
+          <h5 class="card-title">Total Values of Orders: £{{total_value_of_orders}}</h5>
+          <h5 class="card-title">Last Ordered Date: {{latest_date}}</h5>
+        </div>
+
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-body">
+            <form action="" method="POST">
+                {% csrf_token %}
+
+                  {{user_form|crispy}}
+                {{customer_form|crispy}}
+
+                <hr>
+                <input type="submit" name="Update">
+            </form>
+        </div>
+    </div>
+</div>
+
+<h1></h1>
+<h1></h1>
+<h1></h1>
+<h1></h1>
+
+
+
+
+{% endblock %}
