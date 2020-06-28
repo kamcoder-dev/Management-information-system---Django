@@ -72,25 +72,41 @@
 
 
   </style>
-  <nav>
+
+  <nav class="nav flex-column float-left">
 
     <div class="wrapper">
       <div class="sidebar">
         <h2>Logo</h2>
         <ul>
-          <li><a href="{% url 'home' %}"><i class="fas fa-home"></i>DASHBOARD</a></li>
-          <li><a href="{% url 'customer_order_list' %}"><i class="fas fa-shopping-cart"></i>CUSTOMER ORDERS</a></li>
-          <li><a href=""><i class="fas fa-cash-register"></i>PURCHASE ORDERS</a></li>
-          <li><a href="{% url 'customer_list' %}"><i class="fas fa-user-circle"></i>CUSTOMERS</a></li>
-          <li><a href="{% url 'product_list' %}"><i class="fas fa-gifts"></i>PRODUCTS</a></li>
-          <li><a href=""><i class="fas fa-parachute-box"></i>SUPPLIERS</a></li>
-          <li><a href=""><i class="fas fa-cog"></i>SETTINGS</a></li>
-          <li><span class="hello-msg">Hello, {{request.user}}</span></li>
-          <li><span><a class="hello-msg" href="{% url 'logout' %}">Logout</a></span></li>
-
+          <li>
+            <a href="{% url 'home' %}"><i class="fas fa-home"></i>DASHBOARD</a>
+          </li>
+          <li>
+            <a href="{% url 'customer_order_list' %}"><i class="fas fa-shopping-cart"></i>CUSTOMER ORDERS</a>
+          </li>
+          <li>
+            <a href=""><i class="fas fa-cash-register"></i>PURCHASE ORDERS</a>
+          </li>
+          <li>
+            <a href="{% url 'customer_list' %}"><i class="fas fa-user-circle"></i>CUSTOMERS</a>
+          </li>
+          <li>
+            <a href="{% url 'product_list' %}"><i class="fas fa-gifts"></i>PRODUCTS</a>
+          </li>
+          <li>
+            <a href=""><i class="fas fa-parachute-box"></i>SUPPLIERS</a>
+          </li>
+          <li>
+            <a href=""><i class="fas fa-cog"></i>SETTINGS</a>
+          </li>
+          <li>
+            <span class="hello-msg">Hello, {{request.user}}</span>
+          </li>
+          <li>
+            <span><a class="hello-msg" href="{% url 'logout' %}">Logout</a></span>
+          </li>
         </ul>
       </div>
     </div>
-
-
   </nav>

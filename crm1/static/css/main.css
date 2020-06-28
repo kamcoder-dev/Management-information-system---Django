@@ -3,6 +3,11 @@
 
 	body{
 		background-color: #94d8f7;
+		width: 100%;
+		margin:auto;
+		height:auto;
+		display:block;
+	
 	}
 
 
@@ -17,4 +22,15 @@
 
 	#orders-pending{
 		background-color: #7CD1C0;
+	}
+
+
+	#wrapper{
+		display: block;
+		width: 80%;
+		margin:auto;
+	}
+
+	#main-container{
+		padding-left:250px
 	}
