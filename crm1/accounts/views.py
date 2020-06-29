@@ -18,6 +18,7 @@ from django.http import HttpResponseRedirect
 from django.db import transaction
 from django.views.generic import UpdateView
 from django.db.models import Count
+import datetime
 
 
 def registerPage(request):

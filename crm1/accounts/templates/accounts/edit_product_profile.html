@@ -5,78 +5,117 @@
 
 {% block content %}
 
-<style>
-  body,
-  html {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    background: #a6c8e9 !important;
-  }
-</style>
+<br>
 
+<div class="container float-sm-left" style="margin-top: -3rem;margin-right:auto">
+  <div class=" alert alert-light " role="alert">
+    <h4 class="alert-heading">Product Profile</h4>
 
+    <hr>
+    <p class="mb-0">Product Details</p>
+  </div>
+</div>
 
+<br>
 
-<div class="row">
-  <div class="col-md-8">
-    <div class="card card-body">
-      <h5>Product Profile</h5>
+<div class="container float-sm-left">
+  <div class="p-3 mb-2 bg-dark text-white">
+    <div class="row">
+      <div class="col-sm">
+        Number of Items Ordered: {{order_total}}
+      </div>
+      <div class="col-sm">
+        Total Values of Orders: £{{total_value_of_orders}}
+      </div>
+      <div class="col-sm">
+        Last Ordered Date: {{last_ordered_date}}
+      </div>
     </div>
-
-    <div class="card text-center text-black  mb-5" id="total-orders">
-      <div class="card-header">
-        <h5 class="card-title">Number of Items Ordered: {{order_total}}</h5>
-        <h5 class="card-title">Total Values of Orders: £{{total_value_of_orders}}</h5>
-        <h5 class="card-title">Last Ordered Date: {{last_ordered_date}}</h5>
-      </div>
+  </div>
+</div>
 
 
-      <div class="row">
-        <div class="col-md-12">
-          <div class="card card-body">
+<div class="container float-sm-left">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card card-body">
 
-            <form method="post">
-              {% csrf_token %}
-              <div class="form-row">
-                <div class="form-group col-md-3 mb-3">
-                  {{ form.product_sku|as_crispy_field }}
-                </div>
-                <div class="form-group col-lg-9 mb-3">
-                  {{form.name|as_crispy_field }}
-                </div>
-                <div class="form-group col-md-3 mb-0">
-                  {{ form.category|as_crispy_field }}
-                </div>
-                <div class="col-sm-10">
-                  <div class="form-group col-md-50 mb-30">
-                    {{ form.description|as_crispy_field }}
-                  </div>
-                </div>
-                <div class="form-group col-md-6 mb-12">
-                  {{ form.r_price|as_crispy_field }}
-                </div>
-                <div class="form-group col-md-5 mb-12">
-                  {{ form.d_price|as_crispy_field }}
-                </div>
-                <div class="form-group col-md-5 mb-12">
-                  {{ form.start_date|as_crispy_field }}
-                </div>
-                <div class="form-group col-md-5 mb-12">
-                  {{ form.end_date|as_crispy_field }}
-                </div>
-                <div class="form-group col-md-6 mb-12">
-                  {{ form.stock|as_crispy_field }}
-                </div>
-                <div class="form-group col-md-4 mb-0">
-                  {{ form.min_stock|as_crispy_field }}
+        <form method="post">
+          {% csrf_token %}
+          <div class="form-row">
+            <label for="sku" div class="form-group col-md-1.6 mb-3" style="padding-left: 1.2rem;">
 
+              {{ form.product_sku|as_crispy_field }}
 
-                  <button type="submit" class="btn btn-primary btn-lg">Update</button>
-            </form>
           </div>
-        </div>
+          <div class="form-group col-lg-5 mb-3">
+            {{form.name|as_crispy_field }}
+          </div>
+          <div class="form-group col-md-2 mb-0">
+            {{ form.category|as_crispy_field }}
+          </div>
+
+          <div class="form-group col-md-9 mb-12" style="padding-left: 1.2rem;">
+            {{ form.description|as_crispy_field }}
+
+          </div>
+          <div class="form-group col-md-2 mb-12">
+            {{ form.r_price|as_crispy_field }}
+          </div>
+          <div class="form-row" style="padding-left: 1.2rem;">
+
+            <div class="form-group col-lg-2 mb-6">
+              {{ form.d_price|as_crispy_field }}
+            </div>
+            <div class="form-group col-md-2 mb-5">
+              {{ form.start_date|as_crispy_field }}
+            </div>
+            <div class="form-group col-md-2 mb-5">
+              {{ form.end_date|as_crispy_field }}
+            </div>
+
+          </div>
+          <div class="form-row" style="padding-left: 1.2rem;">
+
+            <div class="form-group col-md-4 mb-12">
+              {{ form.stock|as_crispy_field }}
+            </div>
+            <div class="form-group col-md-4 mb-0">
+              {{ form.min_stock|as_crispy_field }}
+            </div>
+        </form>
       </div>
+    </div>
+  </div>
+</div>
+
+<div class="container float-sm-left">
+  <div class="card card-body">
+    <div class="row">
+      <button type="submit" class="btn btn-primary float-sm-right btn-lg">Update</button>
+    </div>
+  </div>
+</div>
 
 
-      {% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}
