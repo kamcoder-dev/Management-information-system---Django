@@ -68,6 +68,7 @@
               {{ form.d_price|as_crispy_field }}
             </div>
             <div class="form-group col-md-2 mb-5">
+
               {{ form.start_date|as_crispy_field }}
             </div>
             <div class="form-group col-md-2 mb-5">
@@ -83,19 +84,27 @@
             <div class="form-group col-md-4 mb-0">
               {{ form.min_stock|as_crispy_field }}
             </div>
-        </form>
+
+          </div>
       </div>
     </div>
   </div>
-</div>
 
-<div class="container float-sm-left">
-  <div class="card card-body">
-    <div class="row">
-      <button type="submit" class="btn btn-primary float-sm-right btn-lg">Update</button>
+  <div class="card bg-light">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-lg-10">
+          <a class="btn btn-outline-primary btn-lg" href="{% url 'product_list' %}">Cancel</a>
+        </div>
+        <div class="row">
+          <div class="col-lg-7">
+            <button type="submit" class="btn btn-primary btn-lg">Update</button>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
+
+    </form>
 
 
 
@@ -114,8 +123,4 @@
 
 
 
-
-
-
-
-{% endblock %}
+    {% endblock %}
