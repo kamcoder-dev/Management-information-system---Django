@@ -4,24 +4,44 @@
 
 {% block content %}
 
-<div class="container">
 
-	<div class="alert alert-primary" style="width:60rem">
-		<h2>Customer List</h2>
+<style>
+	.btn {
+		color: blue;
+	}
+</style>
+
+
+<div class="container float-sm-left" style="margin-top: -1.5rem;margin-right:auto">
+	<div class=" alert alert-light " role="alert">
+		<h4 class="alert-heading">Customer List</h4>
+
+		<hr>
+		<p class="mb-0">Review your list of customers</p>
 	</div>
 
 </div>
 
 
-<div class=container>
-	<form method="GET">
-		{% csrf_token %}
-		{{myFilter1.form | crispy}}
+
+
+
+<div class="container float-sm-left" style="padding-left:5px;">
+	<div class="card bg-light mb-3 shadow-sm">
+		<form method="GET">
+			<div class="row">
+				<div class="col-4">
+					{% csrf_token %}
+					{{myFilter1.form | crispy}}
+		</form>
+
+		<a class="btn btn-primary" name='new_customer' href="{% url 'new_customer_profile' %}" role="button">NEW</a>
+	</div>
+
+
+</div>
 </div>
 
-<div class=container>
-	<a class="btn btn-primary" name='new_customer' href="{% url 'new_customer_profile' %}" role="button">NEW</a>
-</div>
 
 
 
@@ -48,20 +68,13 @@
 			<td>{{d.first_name}} {{d.middle_name}} {{d.last_name}}</td>
 			<td>{{d.user.email}}</td>
 			<td>{{d.latest}}</td>
-			<td><a class="btn btn-sm btn-info" name="edit_customer" href="{% url 'customer_profile' d.id %}">Edit</a>
+			<td><a class="btn btn-light" name="edit_customer" href="{% url 'customer_profile' d.user.id %}">Edit</a>
 			</td>
-			<td><a class="btn btn-sm btn-danger" href="{% url 'delete_profile' d.id %}">Delete</a></td>
-			<td><a class="btn btn-sm btn-secondary" href="{% url 'address_customer' d.id %}">Address</a></td>
+			<td><a class="btn btn-light" href="{% url 'delete_profile' d.user.id %}">Delete</a></td>
+			<td><a class="btn btn-light" href="{% url 'address_customer' d.user.id %}">Address</a></td>
 		</tr>
 
 		{% endfor %}
-
-
-
-
-
-
-
 
 
 

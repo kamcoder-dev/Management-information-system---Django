@@ -14,11 +14,12 @@ from .models import *
 from .forms import UserAdminCreationForm, UserAdminChangeForm, RegisterForm, LoginForm, OrderForm, ProductForm, CustomerProfileForm, CustomUserForm, UpdateCustomUserForm, PictureForm, AddressUpdate, CreateOrderForm, CreateProductForm, EditCustomerProfileForm
 from .filters import OrderFilter, ProductFilter, CustomerlistFilter, ProductListFilter, OrderListFilter
 from django.db.models import F, Max, Sum
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.db import transaction
 from django.views.generic import UpdateView
 from django.db.models import Count
 import datetime
+from django.shortcuts import get_object_or_404
 
 
 def registerPage(request):
@@ -77,7 +78,7 @@ def NewProductProfile(request):
         form = CreateProductForm(request.POST or None)
         if form.is_valid():
             form.save()
-            return redirect('/')
+            return redirect('product_list')
     return render(request, 'accounts/new_product_profile.html', {'form': form})
 
 
@@ -112,14 +113,14 @@ def createOrder(request, pk):
         Customer, Order, fields=('product', 'status'), extra=10)
     customer = Customer.objects.get(id=pk)
     formset = OrderFormSet(queryset=Order.objects.none(), instance=customer)
-    #form = OrderForm(initial={'customer':customer})
+    # form = OrderForm(initial={'customer':customer})
     if request.method == 'POST':
-        #print('Printing POST:', request.POST)
+        # print('Printing POST:', request.POST)
         form = OrderForm(request.POST)
         formset = OrderFormSet(request.POST, instance=customer)
         if formset.is_valid():
             formset.save()
-            return redirect('/')
+            return redirect('customer_order_list')
 
     context = {'form': formset}
     return render(request, 'accounts/order_form.html', context)
@@ -135,7 +136,7 @@ def updateOrder(request, pk):
         form = OrderForm(request.POST, instance=order)
         if form.is_valid():
             form.save()
-            return redirect('/')
+            return redirect('customer_order_list')
 
     context = {'form': form}
     return render(request, 'accounts/order_form.html', context)
@@ -146,7 +147,7 @@ def deleteOrder(request, pk):
     order = Order.objects.get(id=pk)
     if request.method == "POST":
         order.delete()
-        return redirect('/')
+        return redirect('customer_order_list')
 
     context = {'item': order}
     return render(request, 'accounts/delete.html', context)
@@ -157,17 +158,17 @@ def customer_list(request):
 
     users = User.objects.all().select_related('customer')
 
-    #customer_list = Customer.objects.all().order_by('id')
+    # customer_list = Customer.objects.all().order_by('id')
 
     customer_list = Customer.objects.annotate(
         latest=Max('order__date_created'))
 
-    #dingo = Order.objects.all().values_list('date_created')
+    # dingo = Order.objects.all().values_list('date_created')
 
-    #last_purchase_order = dingo.filter(customer__id).latest()
+    # last_purchase_order = dingo.filter(customer__id).latest()
 
     order = Order.objects.all()
-    #k = Customer.objects.annotate(last_purchase=Max('order__date_created'))
+    # k = Customer.objects.annotate(last_purchase=Max('order__date_created'))
     k = Order.objects.values('customer_id').annotate(
         last_created=Max('date_created'))
     myFilter1 = CustomerlistFilter(request.GET, queryset=customer_list)
@@ -177,13 +178,13 @@ def customer_list(request):
 
     return render(request, 'accounts/customer_list.html', context)
 
-    #order =  Order.objects.all()
+    # order =  Order.objects.all()
 
-    #latest_order_per_user = Order.objects.annotate(latest=Max('customer__order__date_created')).filter(date_created=F('latest'))
-    #latest_dates = latest_order_per_user.values('date_created' )
-    #last_date = latest_dates.last()
+    # latest_order_per_user = Order.objects.annotate(latest=Max('customer__order__date_created')).filter(date_created=F('latest'))
+    # latest_dates = latest_order_per_user.values('date_created' )
+    # last_date = latest_dates.last()
 
-    #date_created = Customer.objects.annotate(last_purchase=Max('order__date_created'))
+    # date_created = Customer.objects.annotate(last_purchase=Max('order__date_created'))
 
 # @login_required(login_url='login')
 # def CustomerProfile(request, pk):
@@ -210,16 +211,21 @@ def CustomerProfile(request, pk):
 
     customer_s = Order.objects.all().values_list('product__r_price')
 
-    r = customer_s.filter(customer__id=pk).aggregate(Sum('product__r_price'))
+    r = customer_s.filter(customer__id=pk).aggregate(
+        Sum('product__r_price'))
     total_value_of_orders = list(r.values())[0]
 
-    tu = Order.objects.all().values_list('date_created')
-    latest_date = tu.filter(customer__id=pk).latest()
+    try:
+        latest_date = Order.objects.all().values_list(
+            'date_created').filter(customer__id=pk).latest()
+
+    except Order.DoesNotExist:
+        latest_date = None
 
     customer = Customer.objects.get(id=pk)
     user = User.objects.get(id=pk)
     user_form = UpdateCustomUserForm(instance=user)
-    #customer_form = CustomerProfileForm(instance=request.user.customer)
+    # customer_form = CustomerProfileForm(instance=request.user.customer)
     customer_form = EditCustomerProfileForm(instance=customer)
 
     if request.method == 'POST':
@@ -233,7 +239,7 @@ def CustomerProfile(request, pk):
             customer = customer_form.save(commit=False)
             customer.user = user
             customer.save()
-            return redirect('/')
+            return redirect('customer_list')
 
     context = {'user_form': user_form, 'customer_form': customer_form, 'order_customer_total': order_customer_total,
                'total_value_of_orders': total_value_of_orders, 'latest_date': latest_date}
@@ -253,7 +259,7 @@ def deleteProfile(request, pk):
     customer = User.objects.get(id=pk)
     if request.method == "POST":
         customer.delete()
-        return redirect('/')
+        return redirect('customer_list')
 
     context = {'customer': customer}
     return render(request, 'accounts/delete_profile.html', context)
@@ -272,7 +278,7 @@ def NewCustomerProfile(request):
             customer = customer_form.save(commit=False)
             customer.user = user
             customer.save()
-            return redirect('/')
+            return redirect('customer_list')
 
     return render(request, 'accounts/new_customer_profile.html', {'user_form': user_form, 'customer_form': customer_form})
 
@@ -311,7 +317,7 @@ def EditProduct(request, pk):
         form = ProductForm(request.POST, instance=product)
         if form.is_valid():
             form.save()
-            return redirect('/')
+            return redirect('product_list')
 
     context = {'form': form, 'order_total': order_total,
                'total_value_of_orders': total_value_of_orders, 'last_ordered_date': last_ordered_date}
@@ -323,7 +329,7 @@ def DeleteProductProfile(request, pk):
     product = Product.objects.get(id=pk)
     if request.method == "POST":
         product.delete()
-        return redirect('/')
+        return redirect('product_list')
 
     return render(request, 'accounts/delete_product_profile.html', {'product': product})
 
@@ -341,23 +347,23 @@ def ProductPicture(request, pk):
         formset = PictureFormSet(request.POST, request.FILES, instance=product)
         if formset.is_valid():
             formset.save()
-            return redirect('/')
+            return redirect('product_list')
 
     return render(request, 'accounts/product_picture.html', {'form': formset})
 
 
 @login_required(login_url='login')
 def Address(request, pk):
-    #user_form = RegisterForm()
+    # user_form = RegisterForm()
     address = Customer.objects.get(id=pk)
     address_form = AddressUpdate(instance=address)
     if request.method == 'POST':
-        #user_form = RegisterForm(request.POST)
+        # user_form = RegisterForm(request.POST)
         address_form = AddressUpdate(request.POST, instance=address)
 
         if address_form.is_valid():
             address_form.save()
-            return redirect('/')
+            return redirect('customer_list')
 
     context = {'address_form': address_form}
     return render(request, 'accounts/address.html', context)
@@ -384,7 +390,7 @@ def newOrder(request):
         form = CreateOrderForm(request.POST or None)
         if form.is_valid():
             form.save()
-            return redirect('/')
+            return redirect('customer_order_list')
 
     return render(request, 'accounts/new_order.html', {'form': form})
 
@@ -400,7 +406,7 @@ def editOrder(request, pk):
         form = CreateOrderForm(request.POST, instance=order)
         if form.is_valid():
             form.save()
-            return redirect('/')
+            return redirect('customer_order_list')
 
     return render(request, 'accounts/edit_order.html', {'form': form, 'order_date': order_date})
 
@@ -410,6 +416,6 @@ def DeleteOrder(request, pk):
     order = Order.objects.get(id=pk)
     if request.method == "POST":
         order.delete()
-        return redirect('/')
+        return redirect('customer_order_list')
 
     return render(request, 'accounts/delete_order.html', {'order': order})

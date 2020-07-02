@@ -24,8 +24,8 @@
 
 
 
-<div class="container float-sm-left">
-	<div class="card bg-light mb-3 shadow-sm" style="width:74rem;">
+<div class="container float-sm-left" style="padding-left:5px;">
+	<div class="card bg-light mb-3 shadow-sm">
 		<form method="GET">
 			<div class="row">
 				<div class="col-4">
@@ -44,44 +44,51 @@
 
 
 <br>
-<div class="container float-lg-left">
-	<div class="card shadow-sm-left">
-		<div class="card card-body">
-			<table class="table">
-				<tr>
-					<th>SKU</th>
-					<th>Product Name</th>
-					<th>Number of Items Ordered</th>
-					<th>Edit Product</th>
-					<th>Delete Product</th>
-					<th>Upload Picture</th>
-
-				</tr>
-
-				{% for i in product_list %}
 
 
+<div class="card card-body">
+	<table class="table">
+		<tr>
+			<th>SKU</th>
+			<th>Product Name</th>
+			<th>Number of Items Ordered</th>
+			<th>Edit Product</th>
+			<th>Delete Product</th>
+			<th>Upload Picture</th>
 
-				<tr>
-					<td>{{i.product_sku}}</td>
-					<td>{{i.name}} </td>
-					<td>{{i.norders}}</td>
+		</tr>
 
-					<td><a class="btn btn-light" name="edit_product"
-							href="{% url 'edit_product_profile' i.id %}">Edit</a>
-					</td>
-					<td><a class="btn btn-light" href="{% url 'delete_product_profile' i.id %}">Delete</a>
-					</td>
-					<td><a class="btn btn-light" href="{% url 'product_picture' i.id %}">Pictures</a>
-					</td>
+		{% for i in product_list %}
 
-				</tr>
 
-				{% endfor %}
 
-			</table>
-		</div>
-	</div>
+		<tr>
+			<td>{{i.product_sku}}</td>
+			<td>{{i.name}} </td>
+			<td>{{i.norders}}</td>
+
+
+			<td><a class="btn btn-light" name="edit_product" href="{% url 'edit_product_profile' i.id %}">Edit</a>
+			</td>
+			<td><a class="btn btn-light" href="{% url 'delete_product_profile' i.id %}">Delete</a>
+			</td>
+			<td><a class="btn btn-light" href="{% url 'product_picture' i.id %}">Pictures</a>
+			</td>
+
+		</tr>
+
+
+
+
+
+
+
+
+		{% endfor %}
+
+	</table>
+</div>
+</div>
 </div>
 </div>
 </div>
