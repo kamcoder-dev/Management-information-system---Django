@@ -3,22 +3,21 @@
 {% block content %}
 
 <br>
-<div class="row">
-	<div class="col-md-6">
-		<div class="card card-body">
 
 
-			<p>Are you sure you want to delete "{{customer}}"?</p>
 
-			<form action="{% url 'delete_profile' customer.id  %}" method="POST">
+<div class="card border-danger mb-3" style="max-width: 18rem;">
+	<div class="card-header">Are you sure you want to delete "{{customer}}</div>
+	<div class="card-body text-danger">
+		<form action="{% url 'delete_profile' customer.id  %}" method="POST">
+			{% csrf_token %}
+			<a class="btn btn-outline-danger" href="{% url 'customer_list' %}">Cancel</a>
+			<input class="btn btn-outline-danger" type="submit" name="Confirm">
 
-				{% csrf_token %}
-				<a class="btn btn-warning" href="{% url 'customer_list' %}">Cancel</a>
 
-				<input class="btn btn-danger" type="submit" name="Confirm">
-			</form>
-		</div>
 	</div>
-</div>
 
-{% endblock %}
+
+
+
+	{% endblock %}

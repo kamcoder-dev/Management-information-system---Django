@@ -64,9 +64,12 @@ def home(request):
     delivered = orders.filter(status='Delivered').count()
     pending = orders.filter(status='Pending').count()
 
+    last_ordered_date = Order.objects.all().values_list(
+        'date_created').latest()
+
     context = {'orders': orders, 'customers': customers,
                'total_orders': total_orders, 'delivered': delivered,
-               'pending': pending}
+               'pending': pending, 'total_customers': total_customers, 'last_ordered_date': last_ordered_date}
 
     return render(request, 'accounts/dashboard.html', context)
 
@@ -307,9 +310,12 @@ def EditProduct(request, pk):
     r = product_no.aggregate(Sum('product__r_price'))
     total_value_of_orders = list(r.values())[0]
 
-    tu = Order.objects.all().values_list('date_created')
+    try:
+        last_ordered_date = Order.objects.all().values_list(
+            'date_created').filter(product__id=pk).latest()
 
-    last_ordered_date = tu.filter(product__id=pk).latest()
+    except Order.DoesNotExist:
+        last_ordered_date = None
 
     product = Product.objects.get(id=pk)
     form = ProductForm(instance=product)
@@ -387,6 +393,7 @@ def orderList(request):
 def newOrder(request):
     form = CreateOrderForm()
     if request.method == 'POST':
+
         form = CreateOrderForm(request.POST or None)
         if form.is_valid():
             form.save()

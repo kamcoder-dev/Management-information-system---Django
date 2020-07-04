@@ -68,11 +68,12 @@
 			<td>{{i.norders}}</td>
 
 
-			<td><a class="btn btn-light" name="edit_product" href="{% url 'edit_product_profile' i.id %}">Edit</a>
+			<td><a class="btn btn-outline-primary" name="edit_product"
+					href="{% url 'edit_product_profile' i.id %}">Edit</a>
 			</td>
-			<td><a class="btn btn-light" href="{% url 'delete_product_profile' i.id %}">Delete</a>
+			<td><a class="btn btn-outline-primary" href="{% url 'delete_product_profile' i.id %}">Delete</a>
 			</td>
-			<td><a class="btn btn-light" href="{% url 'product_picture' i.id %}">Pictures</a>
+			<td><a class="btn btn-outline-primary" href="{% url 'product_picture' i.id %}">Pictures</a>
 			</td>
 
 		</tr>

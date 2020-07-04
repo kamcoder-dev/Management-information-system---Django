@@ -6,4 +6,34 @@
 
 <br>
 
-{% endblock %}
+<div class="container float-sm-left" style="margin-top: -1.5rem;margin-right:auto">
+    <div class=" alert alert-light " role="alert">
+        <h4 class="alert-heading">Dashboard</h4>
+
+
+    </div>
+
+    <div class="card-columns shadow-sm">
+        <div class="card text-white bg-info ">
+            <div class="card-body text-center">
+                <p class="card-text"> Total Customers: {{total_customers}}</p>
+            </div>
+        </div>
+        <div class="card text-white bg-info">
+            <div class="card-body text-center">
+                <p class="card-text">Total Number of Orders: {{total_orders}}</p>
+            </div>
+        </div>
+        <div class="card text-white bg-info">
+            <div class="card-body text-center">
+                <p class="card-text">Latest Date: {{last_ordered_date}}</p>
+            </div>
+        </div>
+
+
+
+    </div>
+
+
+
+    {% endblock %}
