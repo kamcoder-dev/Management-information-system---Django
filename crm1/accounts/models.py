@@ -13,6 +13,7 @@ from django.dispatch import receiver
 from activatable_model.models import BaseActivatableModel
 from django.db.models import Max
 import uuid
+from datetime import datetime
 
 
 # Create your models here.
@@ -160,16 +161,23 @@ class Product(models.Model):
     description = models.CharField(max_length=200, null=True, blank=True)
     r_price = models.FloatField(null=True)
     d_price = models.FloatField(null=True, blank=True, default='')
-    start_date = models.DateTimeField(null=True, blank=True, default='')
+    start_date = models.DateField(null=True, blank=True, default='')
     end_date = models.DateField(null=True, blank=True, default='')
     tags = models.ManyToManyField(Tag)
-    stock = models.IntegerField(max_length=200, null=True)
-    min_stock = models.IntegerField(max_length=200, null=True)
+    stock = models.IntegerField(null=True)
+    min_stock = models.IntegerField(null=True)
     is_active = models.BooleanField(default=False)
     product_sku = models.CharField(max_length=200, null=True)
 
     def __str__(self):
         return self.product_sku
+
+  #  def clean(self):
+   #     if self.start_date < datetime.now() < self.end_date:
+    #        self.r_price = None
+
+     #   elif self.end_date < datetime.now():
+      #      self.d_price = None
 
 
 class Order(models.Model):

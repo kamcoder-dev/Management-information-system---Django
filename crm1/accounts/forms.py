@@ -4,8 +4,10 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from .models import User, Customer, Order, Product, Picture
 from django.forms import ModelForm
-User = get_user_model()
+from django.forms import widgets, DateTimeField, DateField, DateInput
+from crispy_forms.helper import FormHelper
 
+User = get_user_model()
 
 
 class UserAdminCreationForm(forms.ModelForm):
@@ -14,7 +16,8 @@ class UserAdminCreationForm(forms.ModelForm):
     fields, plus a repeated password.
     """
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
-    password2 = forms.CharField(label='Password confirmation', widget=forms.PasswordInput)
+    password2 = forms.CharField(
+        label='Password confirmation', widget=forms.PasswordInput)
 
     class Meta:
         model = User
@@ -36,17 +39,19 @@ class UserAdminCreationForm(forms.ModelForm):
             user.save()
         return user
 
+
 class RegisterForm(forms.ModelForm):
     """
     A form for creating new users. Includes all the required
     fields, plus a repeated password.
     """
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
-    password2 = forms.CharField(label='Password confirmation', widget=forms.PasswordInput)
+    password2 = forms.CharField(
+        label='Password confirmation', widget=forms.PasswordInput)
 
     class Meta:
         model = User
-        fields = ('email','admin', 'active')
+        fields = ('email', 'admin', 'active')
 
     def clean_password2(self):
         # Check that the two password entries match
@@ -63,6 +68,7 @@ class RegisterForm(forms.ModelForm):
         if commit:
             user.save()
         return user
+
 
 class UserAdminChangeForm(forms.ModelForm):
     """A form for updating users. Includes all the fields on
@@ -82,53 +88,70 @@ class UserAdminChangeForm(forms.ModelForm):
         return self.initial["password"]
 
 
-
 class LoginForm(forms.Form):
     username = forms.EmailField(label='Email')
     password = forms.CharField(widget=forms.PasswordInput)
 
 
 class OrderForm(ModelForm):
-	class Meta:
-		model = Order
-		fields = '__all__'
+    class Meta:
+        model = Order
+        fields = '__all__'
 
 
 class ProductForm(forms.ModelForm):
 
-    product_sku = forms.CharField(disabled=True)
+    name = forms.CharField(label="Name")
+    product_sku = forms.CharField(label="SKU Code")
+    r_price = forms.FloatField(label="Regular Price")
+    d_price = forms.FloatField(label="Discount Price", required=False)
+    min_stock = forms.IntegerField(label="Minimum Stock")
+    stock = forms.IntegerField(label="No in Stock")
+    description = forms.CharField(
+        label="Description", widget=forms.Textarea)
+
+    start_date = forms.DateTimeField(widget=DateInput(format='%d-%m-%Y'),
+                                     input_formats=('%d-%m-%Y',),
+                                     required=False)
+
+    end_date = forms.DateTimeField(widget=DateInput(format='%d-%m-%Y'),
+                                   input_formats=('%d-%m-%Y',),
+                                   required=False)
 
     class Meta:
         model = Product
-        fields = ['product_sku','name','category','description','r_price','d_price','start_date', 'end_date','stock','min_stock']
+        fields = ['product_sku', 'name', 'category', 'description', 'r_price',
+                  'd_price', 'start_date', 'end_date', 'stock', 'min_stock']
+
+    def __init__(self, *args, **kwargs):
+        super(ProductForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        #self.helper.form_class = "form-horizontal"
+
 
 class CreateProductForm(forms.ModelForm):
 
     class Meta:
         model = Product
-        fields = ['product_sku','name','category','description','r_price','d_price','start_date', 'end_date','stock','min_stock']
-
-
-
-
+        fields = ['product_sku', 'name', 'category', 'description', 'r_price',
+                  'd_price', 'start_date', 'end_date', 'stock', 'min_stock']
 
 
 class CustomerProfileForm(ModelForm):
-	class Meta:
-		model = Customer
-		fields = ['title','first_name','middle_name','last_name','phone','country','birth_year','gender']
+    class Meta:
+        model = Customer
+        fields = ['title', 'first_name', 'middle_name',
+                  'last_name', 'phone', 'country', 'birth_year', 'gender']
+
 
 class EditCustomerProfileForm(ModelForm):
 
-
-    customer_uuid = forms.UUIDField(disabled=True)
-
+    customer_uuid = forms.UUIDField(disabled=True, label="Customer ID")
 
     class Meta:
         model = Customer
-        fields = ['customer_uuid','title','first_name','middle_name','last_name','phone','country','birth_year','gender']
-
-
+        fields = ['customer_uuid', 'title', 'first_name', 'middle_name',
+                  'last_name', 'phone', 'country', 'birth_year', 'gender']
 
 
 class PictureForm(forms.ModelForm):
@@ -136,23 +159,26 @@ class PictureForm(forms.ModelForm):
         model = Picture
         fields = '__all__'
 
+
 class CustomUserForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['email', 'password', 'active', 'admin']
         #exclude = ('last_login', 'staff' )
 
-class UpdateCustomUserForm(forms.ModelForm):
 
+class UpdateCustomUserForm(forms.ModelForm):
 
     class Meta:
         model = User
         fields = ['email', 'password', 'active', 'admin']
 
+
 class AddressUpdate(forms.ModelForm):
     class Meta:
         model = Customer
-        fields = ['address1', 'address2','city', 'county', 'post_code']
+        fields = ['address1', 'address2', 'city', 'county', 'post_code']
+
 
 class CreateOrderForm(forms.ModelForm):
 

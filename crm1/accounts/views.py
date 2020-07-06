@@ -56,20 +56,23 @@ def logoutUser(request):
 @login_required(login_url='login')
 def home(request):
     orders = Order.objects.all()
-    customers = Customer.objects.all()
 
-    total_customers = customers.count()
+    active_users = User.objects.filter(active=True).count()
 
     total_orders = orders.count()
     delivered = orders.filter(status='Delivered').count()
     pending = orders.filter(status='Pending').count()
 
-    last_ordered_date = Order.objects.all().values_list(
-        'date_created').latest()
+    try:
+        last_ordered_date = list(Order.objects.all().values_list(
+            'date_created').latest())[0]
 
-    context = {'orders': orders, 'customers': customers,
+    except Order.DoesNotExist:
+        last_ordered_date = None
+
+    context = {'orders': orders,
                'total_orders': total_orders, 'delivered': delivered,
-               'pending': pending, 'total_customers': total_customers, 'last_ordered_date': last_ordered_date}
+               'pending': pending, 'active_users': active_users, 'last_ordered_date': last_ordered_date}
 
     return render(request, 'accounts/dashboard.html', context)
 
@@ -219,8 +222,8 @@ def CustomerProfile(request, pk):
     total_value_of_orders = list(r.values())[0]
 
     try:
-        latest_date = Order.objects.all().values_list(
-            'date_created').filter(customer__id=pk).latest()
+        latest_date = list(Order.objects.all().values_list(
+            'date_created').filter(customer__id=pk).latest())[0]
 
     except Order.DoesNotExist:
         latest_date = None
@@ -311,8 +314,8 @@ def EditProduct(request, pk):
     total_value_of_orders = list(r.values())[0]
 
     try:
-        last_ordered_date = Order.objects.all().values_list(
-            'date_created').filter(product__id=pk).latest()
+        last_ordered_date = list(Order.objects.all().values_list(
+            'date_created').filter(product__id=pk).latest())[0]
 
     except Order.DoesNotExist:
         last_ordered_date = None

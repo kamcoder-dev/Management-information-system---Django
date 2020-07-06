@@ -6,17 +6,18 @@
 
 <br>
 
-<div class="container float-sm-left" style="margin-top: -1.5rem;margin-right:auto">
+<div class="container float-sm-left shadow-sm" style="margin-top: -1.5rem;margin-right:auto">
     <div class=" alert alert-light " role="alert">
+        <p class="card-text">Today's Date: {% now "jS F Y " %}</p>
         <h4 class="alert-heading">Dashboard</h4>
 
 
     </div>
 
-    <div class="card-columns shadow-sm">
+    <div class="card-columns ">
         <div class="card text-white bg-info ">
             <div class="card-body text-center">
-                <p class="card-text"> Total Customers: {{total_customers}}</p>
+                <p class="card-text"> Total Number of Active Users: {{active_users}}</p>
             </div>
         </div>
         <div class="card text-white bg-info">
@@ -26,14 +27,14 @@
         </div>
         <div class="card text-white bg-info">
             <div class="card-body text-center">
-                <p class="card-text">Latest Date: {{last_ordered_date}}</p>
+                <p class="card-text">Latest Ordered Date: {{last_ordered_date}}</p>
             </div>
         </div>
-
-
-
     </div>
 
 
+</div>
 
-    {% endblock %}
+
+
+{% endblock %}
