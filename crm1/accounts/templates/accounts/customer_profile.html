@@ -89,22 +89,19 @@
 </div>
 </div>
 
-<div class="container float-sm-left">
-  <div class="card bg-light">
-    <div class="card-body">
-      <div class="row">
-        <div class="col-lg-10">
-          <a class="btn btn-outline-primary btn-lg" href="{% url 'customer_list' %}">Cancel</a>
-        </div>
-        <div class="row">
-          <div class="col-lg-7">
-            <button type="submit" class="btn btn-primary btn-lg">Update</button>
-          </div>
-        </div>
-      </div>
-    </div>
+
+
+<div class="container float-sm-left " style="margin-top: 0.5rem;margin-right:auto">
+  <div class=" alert bg-light float-sm-right shawdow-sm " role="alert">
+    <a class="btn btn-outline-primary btn-lg" href="{% url 'customer_list' %}">Cancel</a>
+    <button type="submit" class="btn btn-primary btn-lg">Update</button>
   </div>
-  </form>
+</div>
+
+
+
+
+</form>
 
 
 
@@ -142,4 +139,4 @@
 
 
 
-  {% endblock %}
+{% endblock %}

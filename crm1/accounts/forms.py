@@ -3,9 +3,11 @@ from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from .models import User, Customer, Order, Product, Picture
-from django.forms import ModelForm
+from django.forms import ModelForm, ModelChoiceField
 from django.forms import widgets, DateTimeField, DateField, DateInput
 from crispy_forms.helper import FormHelper
+from django_toggle_switch_widget.widgets import DjangoToggleSwitchWidget
+from django_countries.fields import CountryField
 
 User = get_user_model()
 
@@ -126,7 +128,7 @@ class ProductForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(ProductForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
-        #self.helper.form_class = "form-horizontal"
+        # self.helper.form_class = "form-horizontal"
 
 
 class CreateProductForm(forms.ModelForm):
@@ -146,6 +148,9 @@ class CustomerProfileForm(ModelForm):
 
 class EditCustomerProfileForm(ModelForm):
 
+    phone = forms.CharField(label="Telephone No")
+    birth_year = forms.CharField(label="Birth Year")
+
     customer_uuid = forms.UUIDField(disabled=True, label="Customer ID")
 
     class Meta:
@@ -164,7 +169,7 @@ class CustomUserForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['email', 'password', 'active', 'admin']
-        #exclude = ('last_login', 'staff' )
+        # exclude = ('last_login', 'staff' )
 
 
 class UpdateCustomUserForm(forms.ModelForm):
@@ -182,6 +187,12 @@ class AddressUpdate(forms.ModelForm):
 
 class CreateOrderForm(forms.ModelForm):
 
+    product_sku = forms.ModelChoiceField(
+        queryset=Product.objects.all(), empty_label="(Choose field)", to_field_name="product_sku")
+    customer_name = forms.ModelChoiceField(
+        queryset=Customer.objects.all(), empty_label="(Choose field)", to_field_name='first_name')
+
     class Meta:
         model = Order
-        fields = '__all__'
+
+        fields = ['product_sku', 'customer_name']

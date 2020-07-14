@@ -275,9 +275,11 @@ def deleteProfile(request, pk):
 def NewCustomerProfile(request):
     user_form = RegisterForm()
     customer_form = CustomerProfileForm()
+
     if request.method == 'POST':
         user_form = RegisterForm(request.POST)
         customer_form = CustomerProfileForm(request.POST)
+        created = Customer.objects.get_or_created(user=request.user)
 
         if user_form.is_valid() and customer_form.is_valid():
             user = user_form.save()
@@ -396,7 +398,6 @@ def orderList(request):
 def newOrder(request):
     form = CreateOrderForm()
     if request.method == 'POST':
-
         form = CreateOrderForm(request.POST or None)
         if form.is_valid():
             form.save()
@@ -408,8 +409,13 @@ def newOrder(request):
 @login_required
 def editOrder(request, pk):
     order = Order.objects.get(id=pk)
-    sho = Order.objects.all().values_list('date_created')
-    order_date = sho.filter(id=pk)
+
+    try:
+        order_date = list(Order.objects.all().values_list(
+            'date_created').filter(id=pk))[0][0]
+    except Order.DoesNotExist:
+        order_date = None
+
     form = CreateOrderForm(instance=order)
 
     if request.method == "POST":
