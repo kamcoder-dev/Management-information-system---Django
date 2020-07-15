@@ -279,7 +279,6 @@ def NewCustomerProfile(request):
     if request.method == 'POST':
         user_form = RegisterForm(request.POST)
         customer_form = CustomerProfileForm(request.POST)
-        created = Customer.objects.get_or_created(user=request.user)
 
         if user_form.is_valid() and customer_form.is_valid():
             user = user_form.save()
@@ -407,8 +406,8 @@ def newOrder(request):
 
 
 @login_required
-def editOrder(request, pk):
-    order = Order.objects.get(id=pk)
+def editOrder(request, pk=None):
+    order = get_object_or_404(Order, id=pk)
 
     try:
         order_date = list(Order.objects.all().values_list(
