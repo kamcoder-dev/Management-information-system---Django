@@ -34,7 +34,6 @@
 </div>
 
 
-
 <div class="container float-sm-left">
     <div class="row">
         <div class="col-md-12">
@@ -48,8 +47,9 @@
                     </div>
                     <br>
                     <div class="form-group col-lg-3 mb-0" style="padding-left: 0.5rem;">
-                        {{ form.product_sku|as_crispy_field }}
+                        {{ form.product|as_crispy_field }}
                     </div>
+
 
 
 
@@ -60,7 +60,7 @@
                     <br>
 
                     <div class="form-group col-lg-3 mb-0" style="padding-left: 0.5rem;">
-                        {{ form.customer|as_crispy_field }}
+                        {{ form.customer_full_name|as_crispy_field }}
                     </div>
 
 

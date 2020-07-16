@@ -187,17 +187,7 @@ class AddressUpdate(forms.ModelForm):
 
 class CreateOrderForm(forms.ModelForm):
 
-    product_sku = forms.ModelChoiceField(queryset=Product.objects.all())
-
-    def __init__(self, *args, **kwargs):
-        if kwargs.get('instance'):
-            initial = kwargs.setdefault('initial', {})
-            if kwargs['instance'].Product.objects.all():
-                initial['product_sku'] = kwargs['instance'].Product.objects.all()
-            else:
-                initial['product_sku'] = None
-
     class Meta:
         model = Order
-        fields = ['customer', 'product', 'delivery_address1', 'delivery_address2',
+        fields = ['customer_full_name', 'product', 'delivery_address1', 'delivery_address2',
                   'delivery_city', 'delivery_county', 'delivery_post_code', 'delivery_country']

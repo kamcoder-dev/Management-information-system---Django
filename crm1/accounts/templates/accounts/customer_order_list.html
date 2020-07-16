@@ -59,7 +59,7 @@
 
 		<tr>
 			<td>{{i.product.name}} </td>
-			<td>{{i.customer.first_name}} {{i.customer.middle_name}} {{i.customer.last_name}}</td>
+			<td>{{i.customer_full_name}}</td>
 			<td>{{i.status}}</td>
 
 			<td><a class="btn btn-outline-primary" name="edit_order" href="{% url 'edit_order' i.id %}">Edit</a></td>

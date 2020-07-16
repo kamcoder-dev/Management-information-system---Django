@@ -126,7 +126,7 @@ class Customer(models.Model):
     customer_uuid = models.UUIDField(default=uuid.uuid4)
 
     def __str__(self):
-        return self.user.email
+        return '{} {} {}'.format(self.first_name, self.middle_name,self.last_name)
 
 
 # @receiver(post_save, sender=User)
@@ -170,7 +170,7 @@ class Product(models.Model):
     product_sku = models.CharField(max_length=200, null=True)
 
     def __str__(self):
-        return self.name
+        return self.product_sku
 
   #  def clean(self):
    #     if self.start_date < datetime.now() < self.end_date:
@@ -188,9 +188,16 @@ class Order(models.Model):
         ('Delivered', 'Delivered'),
     )
 
-    customer = models.ForeignKey(
+    customer_full_name = models.ForeignKey(
         Customer, null=True, on_delete=models.SET_NULL)
-    product = models.ForeignKey(Product, null=True, on_delete=models.SET_NULL)
+    product_name = models.ForeignKey(
+        Product, related_name='%(class)s_name', on_delete=models.SET_NULL, null=True)
+    product = models.ForeignKey(
+        Product,  on_delete=models.SET_NULL, null=True)
+    customer_phone = models.ForeignKey(
+        Customer, related_name='%(class)sphone', on_delete=models.SET_NULL, null=True)
+    user_email = models.ForeignKey(
+        Customer, related_name='email', on_delete=models.SET_NULL, null=True)
     date_created = models.DateTimeField(auto_now_add=True, null=True)
     status = models.CharField(max_length=200, null=True, choices=STATUS)
     note = models.CharField(max_length=1000, null=True)
@@ -201,6 +208,7 @@ class Order(models.Model):
     delivery_county = models.CharField(max_length=1000, null=True)
     delivery_post_code = models.CharField(max_length=1000, null=True)
     delivery_country = CountryField()
+    order_required = models.IntegerField(null=True)
 
     class Meta:
         get_latest_by = 'date_created'

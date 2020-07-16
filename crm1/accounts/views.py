@@ -175,7 +175,7 @@ def customer_list(request):
 
     order = Order.objects.all()
     # k = Customer.objects.annotate(last_purchase=Max('order__date_created'))
-    k = Order.objects.values('customer_id').annotate(
+    k = Order.objects.values('customer_full_name_id').annotate(
         last_created=Max('date_created'))
     myFilter1 = CustomerlistFilter(request.GET, queryset=customer_list)
     customer_list = myFilter1.qs
@@ -212,18 +212,18 @@ def customer_list(request):
 @login_required(login_url='login')
 def CustomerProfile(request, pk):
 
-    customer_no = Order.objects.filter(customer__id=pk)
+    customer_no = Order.objects.filter(customer_full_name__id=pk)
     order_customer_total = customer_no.count()
 
     customer_s = Order.objects.all().values_list('product__r_price')
 
-    r = customer_s.filter(customer__id=pk).aggregate(
+    r = customer_s.filter(customer_full_name__id=pk).aggregate(
         Sum('product__r_price'))
     total_value_of_orders = list(r.values())[0]
 
     try:
         latest_date = list(Order.objects.all().values_list(
-            'date_created').filter(customer__id=pk).latest())[0]
+            'date_created').filter(customer_full_name__id=pk).latest())[0]
 
     except Order.DoesNotExist:
         latest_date = None
