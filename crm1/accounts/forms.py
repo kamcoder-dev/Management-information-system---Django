@@ -189,5 +189,48 @@ class CreateOrderForm(forms.ModelForm):
 
     class Meta:
         model = Order
-        fields = ['customer_full_name', 'product', 'delivery_address1', 'delivery_address2',
-                  'delivery_city', 'delivery_county', 'delivery_post_code', 'delivery_country']
+        fields = ['product', 'customer_full_name', 'delivery_address1', 'delivery_address2', 'delivery_county','delivery_city', 'delivery_country','delivery_post_code']
+   # fproduct_sku = forms.CharField(label="SKU name", max_length=70)
+    # fproduct_name = forms.CharField(
+    #   label="Product Name", max_length=70, disabled=True)
+    #fuser_email = forms.CharField(label="Customer Email", max_length=70)
+    #fcustomer_phone = forms.CharField(label="Phone")
+    #fcustomer_full_name = forms.CharField(label="Full Name", max_length=70)
+    #delivery_address1 = forms.CharField(label="Delivery to")
+    #delivery_address2 = forms.CharField(label="")
+    #delivery_city = forms.CharField(label="")
+    #delivery_country = CountryField().formfield(label="Country")
+    #delivery_post_code = forms.CharField(label="Post Code")
+    #order_required = forms.IntegerField(label="Order Required")
+    #fid = forms.IntegerField(label="id", disabled=True)
+
+    # def save(self, datas):
+    #   ord1 = Order()
+    #  ord1.pk = datas['fid']
+
+    # product = Product()
+    #product_name = Product()
+    #user_email = Customer()
+    #customer_phone = Customer()
+    #user_full_name = Customer()
+
+    #product.pk = datas['fproduct_sku']
+    #product_name.pk = datas['fproduct_name']
+    #user_email.pk = datas['fuser_email']
+    #customer_phone.pk = datas['fcustomer_phone']
+    #customer_full_name.pk = ['customer_full_name']
+
+    # product.save()
+    # product_name.save()
+    # user_email.save()
+    # customer_phone.save()
+    # user_full_name.save()
+
+    #ord1.product = product
+    # ord1.product_name = product_name
+    #ord1.user_email = user_email
+    #ord1.customer_phone = customer_phone
+    #ord1.user_full_name = user_full_name
+
+    # ord1.save()
+    # return ord1

@@ -34,41 +34,79 @@
 </div>
 
 
+
 <div class="container float-sm-left">
     <div class="row">
         <div class="col-md-12">
             <div class="card card-body">
+                <div class='container' style="left:auto;">
+                    <h2>Product Details</h2>
+                </div>
                 <br>
-
                 <form class="form-horizontal" method="post">
                     {% csrf_token %}
-                    <div class='container' style="left: auto;">
-                        <h2>Product Details</h2>
+
+                    <div class="form-group col-md-4 mb-3" style="padding-left: 1.2rem;">
+                        {{form.product|as_crispy_field }}
                     </div>
                     <br>
-                    <div class="form-group col-lg-3 mb-0" style="padding-left: 0.5rem;">
-                        {{ form.product|as_crispy_field }}
-                    </div>
-
-
-
-
-                    <br>
-                    <div class='container'>
-                        <h2>Customer Details</h2>
-                    </div>
-                    <br>
-
-                    <div class="form-group col-lg-3 mb-0" style="padding-left: 0.5rem;">
-                        {{ form.customer_full_name|as_crispy_field }}
-                    </div>
-
-
-                    <div class="container float-sm-left " style="margin-top: 0.5rem;margin-right:auto">
-                        <div class=" alert bg-light float-sm-right shawdow-sm " role="alert">
-                            <a class="btn btn-outline-primary btn-lg" href="{% url 'customer_order_list' %}">Cancel</a>
-                            <button type="submit" class="btn btn-primary btn-lg">Update</button>
+                    <div class="row">
+                        <div class='container' style="left:auto;">
+                            <h2>Customer Details</h2>
                         </div>
                     </div>
+                    <br>
+                    <div class="form-group col-md-4 mb-3" style="padding-left: 1.2rem;">
+                        {{form.customer_full_name|as_crispy_field }}
+                    </div>
+                    <div class="form-group col-md-4 mb-3" style="padding-left: 1.2rem;">
+                        {{form.delivery_address1|as_crispy_field }}
+                    </div>
+                    <div class="form-group col-md-4 mb-3" style="padding-left: 1.2rem;">
+                        {{form.delivery_address2|as_crispy_field }}
+                    </div>
 
-                    {% endblock %}
+                    <div class="form-group col-md-4 mb-3" style="padding-left: 1.2rem;">
+                        {{form.delivery_county|as_crispy_field }}
+                    </div>
+                    <div class="form-row" style="padding-left: 0.5rem;">
+
+                        <div class="form-group col-lg-3 mb-2" style="padding-left: 0.5rem;">
+                            {{ form.delivery_city|as_crispy_field }}
+                        </div>
+                        <div class="form-group col-lg-3 mb-2" style="padding-left: 0.5rem;">
+                            {{ form.delivery_country|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4 mb-3" style="padding-left: 1.2rem;">
+                        {{form.delivery_post_code|as_crispy_field }}
+                    </div>
+
+            </div>
+        </div>
+
+
+
+
+        <div class="container float-sm-left " style="margin-top: 0.5rem;margin-right:auto">
+            <div class=" alert bg-light float-sm-right shawdow-sm " role="alert">
+                <a class="btn btn-outline-primary btn-lg" href="{% url 'customer_order_list' %}">Cancel</a>
+                <button type="submit" class="btn btn-primary btn-lg">Update</button>
+            </div>
+        </div>
+
+
+
+
+        </form>
+
+
+
+
+
+
+
+
+
+
+        {% endblock %}
