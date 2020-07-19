@@ -22,10 +22,10 @@
         Number of Items Ordered: {{order_customer_total}}
       </div>
       <div class="col-sm">
-        Total Values of Orders: £{{total_value_of_orders}}
+        Total Values of Orders: £{{total_value_of_orders|floatformat:2}}
       </div>
       <div class="col-sm">
-        Last Ordered Date:{{latest_date}}
+        Last Ordered Date: {{latest_date|date:"d/m/y"}} {{latest_date|time:"H:i"}}
       </div>
     </div>
   </div>

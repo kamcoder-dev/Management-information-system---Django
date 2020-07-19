@@ -9,6 +9,10 @@
 	.btn {
 		color: blue;
 	}
+
+	.btn2 {
+		margin-left: 5px;
+	}
 </style>
 
 
@@ -25,65 +29,68 @@
 
 
 
+<div class="container float-sm-left" style="padding-left:5px; margin-top: -0.5rem">
+	<div class="alert alert-light shadow-sm">
 
-<div class="container float-sm-left" style="padding-left:5px;">
-	<div class="card bg-light mb-3 shadow-sm">
-		<form method="GET">
-			<div class="row">
-				<div class="col-4">
-					{% csrf_token %}
-					{{myFilter1.form | crispy}}
+		{% csrf_token %}
+		<form class="form-inline" method="GET">
+			<div class="form-group col-md-5 mb-0">
+				{{myFilter1.form.q| as_crispy_field}}
 		</form>
 
-		<a class="btn btn-primary" name='new_customer' href="{% url 'new_customer_profile' %}" role="button">NEW</a>
+
+		<button type="button" href="{% url 'new_customer_profile' %}" class="btn2 btn-primary btn-lg">NEW</button>
+
 	</div>
 
-
-</div>
-</div>
-
-
-
-
-<div class="card card-body">
-	<table class="table">
-		<tr>
-			<th>Customer UUID</th>
-			<th>Full name</th>
-			<th>Email Address</th>
-			<th>Last Purchased</th>
-			<th>Edit Customer</th>
-			<th>Delete Customer</th>
-			<th>Billing Address</th>
-
-		</tr>
-
-
-		{% for d in customer_list %}
-
-
-
-		<tr>
-			<td>{{d.customer_uuid}} </td>
-			<td>{{d.first_name}} {{d.middle_name}} {{d.last_name}}</td>
-			<td>{{d.user.email}}</td>
-			<td>{{d.latest}}</td>
-			<td><a class="btn btn-light" name="edit_customer" href="{% url 'customer_profile' d.user.id %}">Edit</a>
-			</td>
-			<td><a class="btn btn-light" href="{% url 'delete_profile' d.user.id %}">Delete</a></td>
-			<td><a class="btn btn-light" href="{% url 'address_customer' d.user.id %}">Address</a></td>
-		</tr>
-
-		{% endfor %}
-
-
-
-
-
-	</table>
-</div>
 </div>
 
 </div>
+</div>
 
+
+
+<div class="container float-sm-left" style="padding-left:5px;">
+	<div class="card card-body">
+		<table class="table">
+			<tr>
+				<th>Customer ID</th>
+				<th>Full name</th>
+				<th>Email Address</th>
+				<th>Last Purchased</th>
+				<th></th>
+				<th></th>
+				<th></th>
+
+
+			</tr>
+
+
+			{% for d in customer_list %}
+
+
+
+			<tr>
+				<td>01010{{d.id}} </td>
+				<td>{{d.first_name}} {{d.middle_name}} {{d.last_name}}</td>
+				<td>{{d.user.email}}</td>
+				<td>{{d.latest|date:"d/m/y" }} {{d.latest|time:"H:i"}}</td>
+				<td><a class="btn btn-light" name="edit_customer" href="{% url 'customer_profile' d.user.id %}">Edit</a>
+				</td>
+				<td><a class="btn btn-light" href="{% url 'delete_profile' d.user.id %}">Delete</a></td>
+				<td><a class="btn btn-light" href="{% url 'address_customer' d.user.id %}">Address</a></td>
+			</tr>
+
+			{% endfor %}
+
+
+
+
+
+		</table>
+	</div>
+</div>
+
+</div>
+</div>
 {% endblock content %}

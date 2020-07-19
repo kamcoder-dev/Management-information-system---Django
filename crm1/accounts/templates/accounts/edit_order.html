@@ -26,7 +26,7 @@
     <div class="p-3 mb-2 bg-dark text-white">
         <div class="row">
             <div class="col-sm">
-                Order Date: {{order_date}}
+                Order Date: {{order_date|date:"d/m/y"}} {{order_date|date:"H:i"}}
             </div>
 
         </div>

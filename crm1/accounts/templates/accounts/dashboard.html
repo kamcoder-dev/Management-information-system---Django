@@ -8,7 +8,7 @@
 
 <div class="container float-sm-left shadow-sm" style="margin-top: -1.5rem;margin-right:auto">
     <div class=" alert alert-light " role="alert">
-        <p class="card-text">Today's Date: {% now "jS F Y " %}</p>
+        <p class="card-text">Today's Date: {% now "d/m/Y" %}</p>
         <h4 class="alert-heading">Dashboard</h4>
 
 
@@ -27,7 +27,8 @@
         </div>
         <div class="card text-white bg-info">
             <div class="card-body text-center">
-                <p class="card-text">Latest Ordered Date: {{last_ordered_date}}</p>
+                <p class="card-text">Latest Ordered Date: {{last_ordered_date|date:"d/m/y"}}
+                    {{last_ordered_date|time:"H:i"}}</p>
             </div>
         </div>
     </div>

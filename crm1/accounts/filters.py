@@ -1,6 +1,9 @@
 import django_filters
 from django_filters import DateFilter, CharFilter
 from django.db.models import Q
+from django import forms
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout, Submit, Row, Column
 
 from .models import *
 
@@ -28,7 +31,8 @@ class ProductFilter(django_filters.FilterSet):
 
 class CustomerlistFilter(django_filters.FilterSet):
 
-    q = django_filters.CharFilter(method="my_custom_filter")
+    q = django_filters.CharFilter(
+        method="my_custom_filter", field_name="name", label=" ", widget=forms.TextInput(attrs={'placeholder': 'Search by name, email address or customer id'}))
 
     class Meta:
         model = Customer
@@ -36,7 +40,7 @@ class CustomerlistFilter(django_filters.FilterSet):
 
     def my_custom_filter(self, queryset, name, value):
         return Customer.objects.filter(
-            Q(customer_uuid__icontains=value)
+            Q(id__icontains=value)
             | Q(first_name__icontains=value)
             | Q(middle_name__icontains=value)
             | Q(last_name__icontains=value)
@@ -45,7 +49,8 @@ class CustomerlistFilter(django_filters.FilterSet):
 
 class ProductListFilter(django_filters.FilterSet):
 
-    q1 = django_filters.CharFilter(method="my_custom_product_filter")
+    q1 = django_filters.CharFilter(
+        method="my_custom_product_filter", field_name="name", label=" ", widget=forms.TextInput(attrs={'placeholder': 'search'}))
 
     class Meta:
         model = Product
@@ -59,7 +64,8 @@ class ProductListFilter(django_filters.FilterSet):
 
 class OrderListFilter(django_filters.FilterSet):
 
-    q2 = django_filters.CharFilter(method="my_custom_order_filter")
+    q2 = django_filters.CharFilter(
+        method="my_custom_order_filter", field_name="name", label=" ")
 
     class Meta:
         model = Order
