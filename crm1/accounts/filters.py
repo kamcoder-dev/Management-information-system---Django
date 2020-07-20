@@ -32,7 +32,7 @@ class ProductFilter(django_filters.FilterSet):
 class CustomerlistFilter(django_filters.FilterSet):
 
     q = django_filters.CharFilter(
-        method="my_custom_filter", field_name="name", label=" ", widget=forms.TextInput(attrs={'placeholder': 'Search by name, email address or customer id'}))
+        method="my_custom_filter", field_name="name", label=" ", widget=forms.TextInput(attrs={'placeholder': 'Search by name, email address or customer id', 'class': 'form-control', 'size': 45}))
 
     class Meta:
         model = Customer
