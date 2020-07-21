@@ -40,28 +40,28 @@
         <form method="post">
           {% csrf_token %}
           <div class="form-row">
-            <label for="sku" div class="form-group col-md-4 mb-3" style="padding-left: 1.2rem;">
-              {{ customer_form.customer_uuid|as_crispy_field }}
+            <label for="sku" div class="form-group col-md-2 mb-3" style="padding-left: 1.2rem;">
+              {{ customer_form.id|as_crispy_field }}
           </div>
           <div class="form-group col-lg-2 mb-3">
             {{customer_form.title|as_crispy_field }}
           </div>
-          <div class="form-group col-lg-3 mb-3">
+          <div class="form-group col-lg-7 mb-3">
             {{customer_form.first_name|as_crispy_field }}
           </div>
-          <div class="form-group col-lg-3 mb-3">
+          <div class="form-group col-lg-7 mb-3">
             {{customer_form.middle_name|as_crispy_field }}
           </div>
-          <div class="form-group col-lg-3 mb-3">
+          <div class="form-group col-lg-7 mb-3">
             {{customer_form.last_name|as_crispy_field }}
           </div>
-          <div class="form-group col-lg-3 mb-3">
+          <div class="form-group col-lg-7 mb-3">
             {{customer_form.phone|as_crispy_field }}
           </div>
           <div class="form-group col-lg-3 mb-3">
             {{customer_form.country|as_crispy_field }}
           </div>
-          <div class="form-group col-lg-2 mb-3">
+          <div class="form-group col-lg-3 mb-3">
             {{customer_form.birth_year|as_crispy_field }}
           </div>
           <div class="form-group col-lg-2 mb-3">

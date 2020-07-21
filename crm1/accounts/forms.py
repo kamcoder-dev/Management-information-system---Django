@@ -6,6 +6,12 @@ from .models import User, Customer, Order, Product, Picture
 from django.forms import ModelForm, ModelChoiceField
 from django.forms import widgets, DateTimeField, DateField, DateInput
 from crispy_forms.helper import FormHelper
+from crispy_forms import layout, bootstrap
+from crispy_forms.bootstrap import InlineField, FormActions, StrictButton, Div
+from crispy_forms.layout import Layout
+from crispy_forms import bootstrap, layout
+
+
 from django_toggle_switch_widget.widgets import DjangoToggleSwitchWidget
 from django_countries.fields import CountryField
 
@@ -148,15 +154,26 @@ class CustomerProfileForm(ModelForm):
 
 class EditCustomerProfileForm(ModelForm):
 
+    first_name = forms.CharField(label="First Name")
+    last_name = forms.CharField(label="First Name")
+
     phone = forms.CharField(label="Telephone No")
     birth_year = forms.CharField(label="Birth Year")
 
-    customer_uuid = forms.UUIDField(disabled=True, label="Customer ID")
+    id = forms.CharField(disabled=True, label="Customer ID")
 
     class Meta:
         model = Customer
-        fields = ['customer_uuid', 'title', 'first_name', 'middle_name',
+        fields = ['id', 'title', 'first_name', 'middle_name',
                   'last_name', 'phone', 'country', 'birth_year', 'gender']
+
+    def __init__(self, *args, **kwargs):
+        super(EditCustomerProfileForm, self).__init__(*args, **kwargs)
+
+        self.helper = FormHelper(self)
+        self.helper.form_class = 'form-inline'
+        self.helper.layout = Layout('id', 'title', 'first_name', 'middle_name',
+                                    'last_name', 'phone', 'country', 'birth_year', 'gender')
 
 
 class PictureForm(forms.ModelForm):
@@ -189,36 +206,37 @@ class CreateOrderForm(forms.ModelForm):
 
     class Meta:
         model = Order
-        fields = ['product', 'customer_full_name', 'delivery_address1', 'delivery_address2', 'delivery_county','delivery_city', 'delivery_country','delivery_post_code']
+        fields = ['product', 'customer_full_name', 'delivery_address1', 'delivery_address2',
+                  'delivery_county', 'delivery_city', 'delivery_country', 'delivery_post_code']
    # fproduct_sku = forms.CharField(label="SKU name", max_length=70)
     # fproduct_name = forms.CharField(
     #   label="Product Name", max_length=70, disabled=True)
-    #fuser_email = forms.CharField(label="Customer Email", max_length=70)
-    #fcustomer_phone = forms.CharField(label="Phone")
-    #fcustomer_full_name = forms.CharField(label="Full Name", max_length=70)
-    #delivery_address1 = forms.CharField(label="Delivery to")
-    #delivery_address2 = forms.CharField(label="")
-    #delivery_city = forms.CharField(label="")
-    #delivery_country = CountryField().formfield(label="Country")
-    #delivery_post_code = forms.CharField(label="Post Code")
-    #order_required = forms.IntegerField(label="Order Required")
-    #fid = forms.IntegerField(label="id", disabled=True)
+    # fuser_email = forms.CharField(label="Customer Email", max_length=70)
+    # fcustomer_phone = forms.CharField(label="Phone")
+    # fcustomer_full_name = forms.CharField(label="Full Name", max_length=70)
+    # delivery_address1 = forms.CharField(label="Delivery to")
+    # delivery_address2 = forms.CharField(label="")
+    # delivery_city = forms.CharField(label="")
+    # delivery_country = CountryField().formfield(label="Country")
+    # delivery_post_code = forms.CharField(label="Post Code")
+    # order_required = forms.IntegerField(label="Order Required")
+    # fid = forms.IntegerField(label="id", disabled=True)
 
     # def save(self, datas):
     #   ord1 = Order()
     #  ord1.pk = datas['fid']
 
     # product = Product()
-    #product_name = Product()
-    #user_email = Customer()
-    #customer_phone = Customer()
-    #user_full_name = Customer()
+    # product_name = Product()
+    # user_email = Customer()
+    # customer_phone = Customer()
+    # user_full_name = Customer()
 
-    #product.pk = datas['fproduct_sku']
-    #product_name.pk = datas['fproduct_name']
-    #user_email.pk = datas['fuser_email']
-    #customer_phone.pk = datas['fcustomer_phone']
-    #customer_full_name.pk = ['customer_full_name']
+    # product.pk = datas['fproduct_sku']
+    # product_name.pk = datas['fproduct_name']
+    # user_email.pk = datas['fuser_email']
+    # customer_phone.pk = datas['fcustomer_phone']
+    # customer_full_name.pk = ['customer_full_name']
 
     # product.save()
     # product_name.save()
@@ -226,11 +244,11 @@ class CreateOrderForm(forms.ModelForm):
     # customer_phone.save()
     # user_full_name.save()
 
-    #ord1.product = product
+    # ord1.product = product
     # ord1.product_name = product_name
-    #ord1.user_email = user_email
-    #ord1.customer_phone = customer_phone
-    #ord1.user_full_name = user_full_name
+    # ord1.user_email = user_email
+    # ord1.customer_phone = customer_phone
+    # ord1.user_full_name = user_full_name
 
     # ord1.save()
     # return ord1
