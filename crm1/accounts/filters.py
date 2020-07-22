@@ -50,7 +50,7 @@ class CustomerlistFilter(django_filters.FilterSet):
 class ProductListFilter(django_filters.FilterSet):
 
     q1 = django_filters.CharFilter(
-        method="my_custom_product_filter", field_name="name", label=" ", widget=forms.TextInput(attrs={'placeholder': 'search'}))
+        method="my_custom_product_filter", field_name="name", label=" ", widget=forms.TextInput(attrs={'placeholder': 'Search by SKU or Product Name', 'class': 'form-control', 'size': 45}))
 
     class Meta:
         model = Product
@@ -65,7 +65,7 @@ class ProductListFilter(django_filters.FilterSet):
 class OrderListFilter(django_filters.FilterSet):
 
     q2 = django_filters.CharFilter(
-        method="my_custom_order_filter", field_name="name", label=" ")
+        method="my_custom_order_filter", field_name="name", label=" ", widget=forms.TextInput(attrs={'placeholder': 'Search by Customer Name or Product Name', 'class': 'form-control', 'size': 45}))
 
     class Meta:
         model = Order
@@ -74,7 +74,7 @@ class OrderListFilter(django_filters.FilterSet):
     def my_custom_order_filter(self, queryset, name, value):
         return Order.objects.filter(
             Q(status__icontains=value)
-            | Q(customer__first_name__icontains=value)
-            | Q(customer__middle_name__icontains=value)
-            | Q(customer__last_name__icontains=value)
+            | Q(customer_full_name__first_name__icontains=value)
+            | Q(customer_full_name__middle_name__icontains=value)
+            | Q(customer_full_name__last_name__icontains=value)
             | Q(product__name__icontains=value))

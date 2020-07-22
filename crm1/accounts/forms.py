@@ -154,13 +154,14 @@ class CustomerProfileForm(ModelForm):
 
 class EditCustomerProfileForm(ModelForm):
 
-    first_name = forms.CharField(label="First Name")
-    last_name = forms.CharField(label="First Name")
+    first_name = forms.CharField(
+        label="First Name")
+    last_name = forms.CharField(label="Last Name")
 
     phone = forms.CharField(label="Telephone No")
     birth_year = forms.CharField(label="Birth Year")
 
-    id = forms.CharField(disabled=True, label="Customer ID")
+    id = forms.CharField(disabled=True, label="Customer ID", required=False)
 
     class Meta:
         model = Customer
@@ -169,11 +170,12 @@ class EditCustomerProfileForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(EditCustomerProfileForm, self).__init__(*args, **kwargs)
-
-        self.helper = FormHelper(self)
-        self.helper.form_class = 'form-inline'
-        self.helper.layout = Layout('id', 'title', 'first_name', 'middle_name',
-                                    'last_name', 'phone', 'country', 'birth_year', 'gender')
+        self.fields['first_name'].widget.attrs['placeholder'] = 'Enter'
+        self.fields['middle_name'].widget.attrs['placeholder'] = 'Enter'
+        self.fields['last_name'].widget.attrs['placeholder'] = 'Enter'
+        self.fields['last_name'].widget.attrs['placeholder'] = 'Enter'
+        self.fields['phone'].widget.attrs['placeholder'] = 'Enter'
+        self.fields['birth_year'].widget.attrs['placeholder'] = 'Enter'
 
 
 class PictureForm(forms.ModelForm):
@@ -183,9 +185,18 @@ class PictureForm(forms.ModelForm):
 
 
 class CustomUserForm(forms.ModelForm):
+    email = forms.EmailField(label="Email")
+    password = forms.CharField(label="Password")
+
     class Meta:
         model = User
         fields = ['email', 'password', 'active', 'admin']
+
+    def __init__(self, *args, **kwargs):
+        super(CustomUserForm, self).__init__(*args, **kwargs)
+        self.fields['email'].widget.attrs['placeholder'] = 'Enter'
+        self.fields['password'].widget.attrs['placeholder'] = 'Enter'
+
         # exclude = ('last_login', 'staff' )
 
 
@@ -194,6 +205,11 @@ class UpdateCustomUserForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['email', 'password', 'active', 'admin']
+
+    def __init__(self, *args, **kwargs):
+        super(UpdateCustomUserForm, self).__init__(*args, **kwargs)
+        self.fields['email'].widget.attrs['placeholder'] = 'Enter'
+        self.fields['password'].widget.attrs['placeholder'] = 'Enter'
 
 
 class AddressUpdate(forms.ModelForm):
@@ -207,7 +223,7 @@ class CreateOrderForm(forms.ModelForm):
     class Meta:
         model = Order
         fields = ['product', 'customer_full_name', 'delivery_address1', 'delivery_address2',
-                  'delivery_county', 'delivery_city', 'delivery_country', 'delivery_post_code']
+                  'delivery_county', 'delivery_city', 'delivery_country', 'delivery_post_code', ]
    # fproduct_sku = forms.CharField(label="SKU name", max_length=70)
     # fproduct_name = forms.CharField(
     #   label="Product Name", max_length=70, disabled=True)

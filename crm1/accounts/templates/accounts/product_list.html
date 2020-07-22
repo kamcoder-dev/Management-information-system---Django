@@ -8,85 +8,101 @@
 	.btn {
 		color: blue;
 	}
+
+	.btn2 {
+		margin-left: 5px;
+	}
 </style>
 
-<br>
+<div class="row">
+	<div class="col-xs-30 col-md-20">
+		<div class="container fluid-lg-right" style="margin-top: -2rem;width: 4000px; padding-left:-20rem">
+			<div class=" alert alert-light " role="alert">
+				<h4 class="alert-heading">Product List</h4>
 
-<div class="container float-sm-left" style="margin-top: -3rem;margin-right:auto">
-	<div class=" alert alert-light " role="alert">
-		<h4 class="alert-heading">Products List</h4>
+				<hr>
 
-		<hr>
-		<p class="mb-0">Review your list of products</p>
+				<p class="mb-0">Review your list of Product</p>
+			</div>
+		</div>
+
+	</div>
+</div>
+
+
+
+<div class='row'>
+	<div class="col-xs-30 col-md-17">
+		<div class="container fluid-lg-right" style="padding:20px; margin-top: -1rem;width: 1105px">
+			<div class="alert alert-light shadow-sm">
+
+				{% csrf_token %}
+				<form class="form-inline" method="GET">
+					<div class="form-group col-md-5 mb-0">
+						{{myFilter2.form.q1| as_crispy_field}}
+				</form>
+
+
+			</div>
+			<div style="float: right;margin-top: -3rem; padding: 10px 20px ; border-radius: 50px ;">
+
+				<a class="btn btn-primary" href="{% url 'new_product_profile' %}" role="button">NEW</a>
+			</div>
+		</div>
+
 	</div>
 
 </div>
 
 
+</div>
+</div>
 
-<div class="container float-sm-left" style="padding-left:5px;">
-	<div class="card bg-light mb-3 shadow-sm">
-		<form method="GET">
-			<div class="row">
-				<div class="col-4">
-					{% csrf_token %}
-					{{myFilter2.form | crispy}}
-		</form>
 
-		<a class="btn btn-primary sticky-top" name='new_product' href="{% url 'new_product_profile' %}"
-			role="button">NEW</a>
+<div class="row">
+	<div class="col-xs-30 col-md-17">
+		<div class="container float-sm-left" style="padding:20px;margin-top: -3rem;width: 1105px">
+			<div class="card card-body">
+				<table class="table">
+					<tr>
+						<th>SKU</th>
+						<th>Product Name</th>
+						<th>Number of Items Ordered</th>
+						<th>Edit Product</th>
+						<th>Delete Product</th>
+						<th>Upload Picture</th>
+
+					</tr>
+
+					{% for i in product_list %}
+
+
+
+					<tr>
+						<td>{{i.product_sku}}</td>
+						<td>{{i.name}} </td>
+						<td>{{i.norders}}</td>
+
+
+						<td><a class="btn btn-outline-primary" name="edit_product"
+								href="{% url 'edit_product_profile' i.id %}">Edit</a>
+						</td>
+						<td><a class="btn btn-outline-primary" href="{% url 'delete_product_profile' i.id %}">Delete</a>
+						</td>
+						<td><a class="btn btn-outline-primary" href="{% url 'product_picture' i.id %}">Pictures</a>
+						</td>
+
+					</tr>
+
+
+
+
+					{% endfor %}
+
+				</table>
+			</div>
+		</div>
 	</div>
-
-
-</div>
-</div>
-
-
-
-<br>
-
-
-<div class="card card-body">
-	<table class="table">
-		<tr>
-			<th>SKU</th>
-			<th>Product Name</th>
-			<th>Number of Items Ordered</th>
-			<th>Edit Product</th>
-			<th>Delete Product</th>
-			<th>Upload Picture</th>
-
-		</tr>
-
-		{% for i in product_list %}
-
-
-
-		<tr>
-			<td>{{i.product_sku}}</td>
-			<td>{{i.name}} </td>
-			<td>{{i.norders}}</td>
-
-
-			<td><a class="btn btn-outline-primary" name="edit_product"
-					href="{% url 'edit_product_profile' i.id %}">Edit</a>
-			</td>
-			<td><a class="btn btn-outline-primary" href="{% url 'delete_product_profile' i.id %}">Delete</a>
-			</td>
-			<td><a class="btn btn-outline-primary" href="{% url 'product_picture' i.id %}">Pictures</a>
-			</td>
-
-		</tr>
-
-
-
-
-		{% endfor %}
-
-	</table>
-</div>
-</div>
-</div>
 </div>
 </div>
 

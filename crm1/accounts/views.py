@@ -79,9 +79,9 @@ def home(request):
 
 @login_required(login_url='login')
 def NewProductProfile(request):
-    form = CreateProductForm()
+    form = ProductForm()
     if request.method == 'POST':
-        form = CreateProductForm(request.POST or None)
+        form = ProductForm(request.POST or None)
         if form.is_valid():
             form.save()
             return redirect('product_list')
@@ -273,12 +273,12 @@ def deleteProfile(request, pk):
 
 @login_required(login_url='login')
 def NewCustomerProfile(request):
-    user_form = RegisterForm()
-    customer_form = CustomerProfileForm()
+    user_form = UpdateCustomUserForm()
+    customer_form = EditCustomerProfileForm()
 
     if request.method == 'POST':
-        user_form = RegisterForm(request.POST)
-        customer_form = CustomerProfileForm(request.POST)
+        user_form = UpdateCustomUserForm(request.POST)
+        customer_form = EditCustomerProfileForm(request.POST)
 
         if user_form.is_valid() and customer_form.is_valid():
             user = user_form.save()
