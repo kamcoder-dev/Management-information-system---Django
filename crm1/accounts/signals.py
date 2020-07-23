@@ -7,5 +7,5 @@ from django.dispatch import receiver
 def update_stock(sender, instance, created, **kwargs):
 
     if created:
-        instance.product.stock = instance.product.stock - 1
+        instance.product.stock = instance.product.stock - instance.order_required
         instance.product.save()

@@ -223,7 +223,7 @@ class CreateOrderForm(forms.ModelForm):
     class Meta:
         model = Order
         fields = ['product', 'customer_full_name', 'delivery_address1', 'delivery_address2',
-                  'delivery_county', 'delivery_city', 'delivery_country', 'delivery_post_code', ]
+                  'delivery_county', 'delivery_city', 'delivery_country', 'delivery_post_code', 'order_required']
    # fproduct_sku = forms.CharField(label="SKU name", max_length=70)
     # fproduct_name = forms.CharField(
     #   label="Product Name", max_length=70, disabled=True)
