@@ -126,7 +126,7 @@ class Customer(models.Model):
     customer_uuid = models.UUIDField(default=uuid.uuid4)
 
     def __str__(self):
-        return '{} {} {}'.format(self.first_name, self.middle_name,self.last_name)
+        return '{} {} {}'.format(self.first_name, self.middle_name, self.last_name)
 
 
 # @receiver(post_save, sender=User)
@@ -209,6 +209,7 @@ class Order(models.Model):
     delivery_post_code = models.CharField(max_length=1000, null=True)
     delivery_country = CountryField()
     order_required = models.IntegerField(null=True)
+    total_cost_per_order = models.FloatField(null=True, blank=True)
 
     class Meta:
         get_latest_by = 'date_created'

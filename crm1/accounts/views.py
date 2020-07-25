@@ -59,7 +59,8 @@ def home(request):
 
     active_users = User.objects.filter(active=True).count()
 
-    total_orders = orders.count()
+    total_orders = list(Order.objects.all().values_list(
+        'order_required').aggregate(Sum('order_required')).values())[0]
     delivered = orders.filter(status='Delivered').count()
     pending = orders.filter(status='Pending').count()
 
@@ -212,13 +213,17 @@ def customer_list(request):
 @login_required(login_url='login')
 def CustomerProfile(request, pk):
 
-    customer_no = Order.objects.filter(customer_full_name__id=pk)
-    order_customer_total = customer_no.count()
+    try:
+        order_customer_total = Order.objects.filter(
+            customer_full_name__id=pk).values_list('order_required').first()
 
-    customer_s = Order.objects.all().values_list('product__r_price')
+    except Order.DoesNotExist:
+        order_customer_total = None
+
+    customer_s = Order.objects.all().values_list('total_cost_per_order')
 
     r = customer_s.filter(customer_full_name__id=pk).aggregate(
-        Sum('product__r_price'))
+        Sum('total_cost_per_order'))
     total_value_of_orders = list(r.values())[0]
 
     try:
@@ -294,7 +299,7 @@ def NewCustomerProfile(request):
 def product_list(request):
 
     product_list = Product.objects.annotate(
-        norders=Count('order')).order_by('product_sku')
+        norders=Max('order__order_required')).order_by('product_sku')
 
     myFilter2 = ProductListFilter(request.GET, queryset=product_list)
 
@@ -308,11 +313,11 @@ def product_list(request):
 @login_required(login_url='login')
 def EditProduct(request, pk):
 
-    product_no = Order.objects.filter(product__id=pk)
-    order_total = product_no.count()
+    order_total = list(Order.objects.filter(
+        product__id=pk).values_list('order_required'))[0][0]
 
-    r = product_no.aggregate(Sum('product__r_price'))
-    total_value_of_orders = list(r.values())[0]
+    total_value_of_orders = list(Order.objects.filter(
+        product__id=pk).aggregate(Sum('total_cost_per_order')).values())[0]
 
     try:
         last_ordered_date = list(Order.objects.all().values_list(
