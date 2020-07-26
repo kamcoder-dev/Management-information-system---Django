@@ -23,7 +23,7 @@ def total_cost(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
-        Customer.objects.create(user=instance)
+        Customer.objects.get_or_create(user=instance)
 
 
 @receiver(post_save, sender=User)

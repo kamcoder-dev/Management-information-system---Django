@@ -214,8 +214,8 @@ def customer_list(request):
 def CustomerProfile(request, pk):
 
     try:
-        order_customer_total = Order.objects.filter(
-            customer_full_name__id=pk).values_list('order_required').first()
+        order_customer_total = list(Order.objects.filter(
+            customer_full_name__id=pk).aggregate(Sum('order_required')).values())[0]
 
     except Order.DoesNotExist:
         order_customer_total = None
@@ -299,7 +299,7 @@ def NewCustomerProfile(request):
 def product_list(request):
 
     product_list = Product.objects.annotate(
-        norders=Max('order__order_required')).order_by('product_sku')
+        norders=Sum('order__order_required')).order_by('product_sku')
 
     myFilter2 = ProductListFilter(request.GET, queryset=product_list)
 
@@ -314,7 +314,7 @@ def product_list(request):
 def EditProduct(request, pk):
 
     order_total = list(Order.objects.filter(
-        product__id=pk).values_list('order_required'))[0][0]
+        product__id=pk).aggregate(Sum('order_required')).values())[0]
 
     total_value_of_orders = list(Order.objects.filter(
         product__id=pk).aggregate(Sum('total_cost_per_order')).values())[0]
