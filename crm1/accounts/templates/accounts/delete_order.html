@@ -10,7 +10,7 @@
 <div class="card border-danger mb-3" style="max-width: 18rem;">
 	<div class="card-header">Are you sure you want to delete "{{order}}</div>
 	<div class="card-body text-danger">
-		<form action="{{% url 'delete_order' order.id  %}}" method="POST">
+		<form action="{% url 'delete_order' order.id  %}" method="POST">
 			{% csrf_token %}
 			<a class="btn btn-outline-danger" href="{% url 'customer_order_list' %}">Cancel</a>
 			<input class="btn btn-outline-danger" type="submit" name="Confirm">

@@ -9,7 +9,7 @@ from django.contrib import messages
 import django_filters
 from django.contrib.auth.decorators import login_required
 
-# Create your views here.
+
 from .models import *
 from .forms import UserAdminCreationForm, UserAdminChangeForm, RegisterForm, LoginForm, OrderForm, ProductForm, CustomerProfileForm, CustomUserForm, UpdateCustomUserForm, PictureForm, AddressUpdate, CreateOrderForm, CreateProductForm, EditCustomerProfileForm
 from .filters import OrderFilter, ProductFilter, CustomerlistFilter, ProductListFilter, OrderListFilter
@@ -20,16 +20,6 @@ from django.views.generic import UpdateView
 from django.db.models import Count
 import datetime
 from django.shortcuts import get_object_or_404
-
-
-def registerPage(request):
-
-    form = RegisterForm(request.POST or None)
-    context = {"form": form}
-    if form.is_valid():
-        form.save()
-
-    return render(request, "accounts/register.html", context)
 
 
 def loginPage(request):
@@ -90,15 +80,6 @@ def NewProductProfile(request):
 
 
 @login_required(login_url='login')
-def customer_orders(request):
-
-    form = ProductForm()
-
-    context = {'form': form}
-    return render(request, 'accounts/customer_orders.html', context)
-
-
-@login_required(login_url='login')
 def customer(request, pk_test):
     customer = Customer.objects.get(id=pk_test)
 
@@ -120,9 +101,9 @@ def createOrder(request, pk):
         Customer, Order, fields=('product', 'status'), extra=10)
     customer = Customer.objects.get(id=pk)
     formset = OrderFormSet(queryset=Order.objects.none(), instance=customer)
-    # form = OrderForm(initial={'customer':customer})
+
     if request.method == 'POST':
-        # print('Printing POST:', request.POST)
+
         form = OrderForm(request.POST)
         formset = OrderFormSet(request.POST, instance=customer)
         if formset.is_valid():
@@ -165,17 +146,11 @@ def customer_list(request):
 
     users = User.objects.all().select_related('customer')
 
-    # customer_list = Customer.objects.all().order_by('id')
-
     customer_list = Customer.objects.annotate(
         latest=Max('order__date_created'))
 
-    # dingo = Order.objects.all().values_list('date_created')
-
-    # last_purchase_order = dingo.filter(customer__id).latest()
-
     order = Order.objects.all()
-    # k = Customer.objects.annotate(last_purchase=Max('order__date_created'))
+
     k = Order.objects.values('customer_full_name_id').annotate(
         last_created=Max('date_created'))
     myFilter1 = CustomerlistFilter(request.GET, queryset=customer_list)
@@ -184,30 +159,6 @@ def customer_list(request):
                'myFilter1': myFilter1, 'order': order, 'k': k, 'users': users}
 
     return render(request, 'accounts/customer_list.html', context)
-
-    # order =  Order.objects.all()
-
-    # latest_order_per_user = Order.objects.annotate(latest=Max('customer__order__date_created')).filter(date_created=F('latest'))
-    # latest_dates = latest_order_per_user.values('date_created' )
-    # last_date = latest_dates.last()
-
-    # date_created = Customer.objects.annotate(last_purchase=Max('order__date_created'))
-
-# @login_required(login_url='login')
-# def CustomerProfile(request, pk):
-
-#	customer = Customer.objects.get(id=pk)
-#	formie = CustomerProfileForm(instance=customer)
-#	if 'edit_customer' in request.POST:
-#		if request.method == 'POST':
-#			formie = CustomerProfileForm(request.POST, instance=customer)
-#			if formie.is_valid():
-#				formie.save()
-#				return redirect('/')
-
-
-#	context = {'formie':formie}
-#	return render(request, 'accounts/customer_profile.html', context)
 
 
 @login_required(login_url='login')
@@ -236,7 +187,7 @@ def CustomerProfile(request, pk):
     customer = Customer.objects.get(id=pk)
     user = User.objects.get(id=pk)
     user_form = UpdateCustomUserForm(instance=user)
-    # customer_form = CustomerProfileForm(instance=request.user.customer)
+
     customer_form = EditCustomerProfileForm(instance=customer)
 
     if request.method == 'POST':
@@ -255,14 +206,6 @@ def CustomerProfile(request, pk):
     context = {'user_form': user_form, 'customer_form': customer_form, 'order_customer_total': order_customer_total,
                'total_value_of_orders': total_value_of_orders, 'latest_date': latest_date}
     return render(request, 'accounts/customer_profile.html', context)
-
-    # if user_form.is_valid() and customer_form.is_valid():
-    #    user = user_form.save()
-    #    user.save()
-    #    customer = customer_form.save(commit=False)
-    #    customer.user = user
-    #    customer.save()
-    #    return redirect('/')
 
 
 @login_required(login_url='login')

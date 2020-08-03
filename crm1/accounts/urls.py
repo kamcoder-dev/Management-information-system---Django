@@ -4,7 +4,7 @@ from .import views
 
 urlpatterns = [
 
-    path('register/', views.registerPage, name="register"),
+
     path('login/', views.loginPage, name="login"),
     path('logout/', views.logoutUser, name="logout"),
 
@@ -12,11 +12,8 @@ urlpatterns = [
     path('new_product_profile/', views.NewProductProfile,
          name='new_product_profile'),
     path('customer/<str:pk_test>/', views.customer, name="customer"),
-    path('customer_orders/', views.customer_orders, name="customer_orders"),
 
-    path('create_order/<str:pk>/', views.createOrder, name="create_order"),
-    path('update_order/<str:pk>/', views.updateOrder, name="update_order"),
-    path('delete_order/<str:pk>/', views.deleteOrder, name="delete_order"),
+
     path('customer_list/', views.customer_list, name="customer_list"),
     path('customer_profile/<str:pk>/',
          views.CustomerProfile, name="customer_profile"),
