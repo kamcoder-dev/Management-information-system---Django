@@ -11,8 +11,6 @@ urlpatterns = [
     path('', views.home, name="home"),
     path('new_product_profile/', views.NewProductProfile,
          name='new_product_profile'),
-    path('customer/<str:pk_test>/', views.customer, name="customer"),
-
 
     path('customer_list/', views.customer_list, name="customer_list"),
     path('customer_profile/<str:pk>/',
