@@ -12,7 +12,7 @@ from django.contrib.auth.decorators import login_required
 
 from .models import *
 from .forms import UserAdminCreationForm, UserAdminChangeForm, RegisterForm, LoginForm, OrderForm, ProductForm, CustomerProfileForm, CustomUserForm, UpdateCustomUserForm, PictureForm, AddressUpdate, CreateOrderForm, CreateProductForm, EditCustomerProfileForm
-from .filters import OrderFilter, ProductFilter, CustomerlistFilter, ProductListFilter, OrderListFilter
+from .filters import CustomerlistFilter, ProductListFilter, OrderListFilter
 from django.db.models import F, Max, Sum
 from django.http import HttpResponseRedirect, Http404
 from django.db import transaction
