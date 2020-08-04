@@ -21,6 +21,8 @@ from django.db.models import Count
 import datetime
 from django.shortcuts import get_object_or_404
 
+# login view will render an login page to allow authenticate admin users within the MIS
+
 
 def loginPage(request):
     form = LoginForm(request.POST or None)
@@ -37,14 +39,15 @@ def loginPage(request):
             messages.info(request, "Email OR password is incorrect")
     return render(request, "accounts/login.html", context)
 
-# login page to allow authenticate admin users within the MIS
 
+# View to allow users to logout and be redirected back to the login back
 
 def logoutUser(request):
     logout(request)
     return redirect('login')
 
-# view to allow users to logout
+# view to show the dashboard whilst showing the number of active users, total orders, and the last order date
+# Plans to showcase graphs with showing relationships between the models established in models.py
 
 
 @login_required(login_url='login')
@@ -68,9 +71,6 @@ def home(request):
 
     return render(request, 'accounts/dashboard.html', context)
 
-# view to show the dashboard whilst showing the number of active users, total orders, and the last order date
-# Plans to showcase graphs with showing relationships between the models established in models.py
-
 
 @login_required(login_url='login')
 def NewProductProfile(request):
@@ -87,22 +87,25 @@ def NewProductProfile(request):
 @login_required(login_url='login')
 def customer_list(request):
 
-    users = User.objects.all().select_related('customer')
     # Queryset above encompasses the extended user model, with the customer model being inherited
+
+    users = User.objects.all().select_related('customer')
 
     order = Order.objects.all()
 
     customer_list = Customer.objects.annotate(
         latest=Max('order__date_created'))
 
+# Queryset above shows the last purchased order per Customer
+
     last_created = Order.objects.values('customer_full_name_id').annotate(
         last_created=Max('date_created'))
 
-    # Queryset above shows the last purchased order per Customer
+
+# Once renderended on the template, the filter above will allow the intended user to filter through instances based on the customer model fields
 
     myFilter1 = CustomerlistFilter(request.GET, queryset=customer_list)
     customer_list = myFilter1.qs
-    # Once renderended on the template, the filter above will allow the intended user to filter through instances based on the customer model fields
 
     context = {'customer_list': customer_list,
                'myFilter1': myFilter1, 'order': order, 'last_created': last_created, 'users': users}
@@ -113,21 +116,23 @@ def customer_list(request):
 @login_required(login_url='login')
 def CustomerProfile(request, pk):
 
+    # The below shows the total cost of ordered product per customer (which will be displayed on the template)
+
     try:
         order_customer_total = list(Order.objects.filter(
             customer_full_name__id=pk).aggregate(Sum('order_required')).values())[0]
 
-# The above shows the total cost of ordered product per customer (which will be displayed on the template)
+# The below allow the queryset to display "None" when the value is nill.
 
     except Order.DoesNotExist:
         order_customer_total = None
 
-# This allow the queryset to display "None" when the value is nill.
+# Below shows the total value of orders per customer depending the quantity  of products inputted for when generating the instanced for the orders.
 
     total_value_of_orders = list(Order.objects.all().values_list('total_cost_per_order').filter(customer_full_name__id=pk).aggregate(
         Sum('total_cost_per_order')).values())[0]
 
-# Above shows the total value of orders per customer depending the quantity  of products inputted for when generating the instanced for the orders.
+# Above is intended to display on the template to showcase the last date of when the customer had ordered the
 
     try:
         latest_date = list(Order.objects.all().values_list(
@@ -135,8 +140,6 @@ def CustomerProfile(request, pk):
 
     except Order.DoesNotExist:
         latest_date = None
-
-# Above is intended to display on the template to showcase the last date of when the customer had ordered the
 
     customer = Customer.objects.get(id=pk)
     user = User.objects.get(id=pk)
@@ -158,12 +161,14 @@ def CustomerProfile(request, pk):
             customer.save()
             return redirect('customer_list')
 
-# The above shows the user_form and customer_form being used when generating the instances based on the user extended model and its inherited customer model.
+# The above shows the user_form and customer_form being used when updating the instances based on the user extended model and its inherited customer model.
 
     context = {'user_form': user_form, 'customer_form': customer_form, 'order_customer_total': order_customer_total,
                'total_value_of_orders': total_value_of_orders, 'latest_date': latest_date}
     return render(request, 'accounts/customer_profile.html', context)
 
+
+# View below allows to delete each customer instance when selected in the customer list
 
 @login_required(login_url='login')
 def deleteProfile(request, pk):
@@ -175,8 +180,8 @@ def deleteProfile(request, pk):
     context = {'customer': customer}
     return render(request, 'accounts/delete_profile.html', context)
 
-# View above allows to delete each customer instance when selected in the customer list
 
+# The view below allow the admin user to generate an instance of customer
 
 @login_required(login_url='login')
 def NewCustomerProfile(request):
@@ -195,8 +200,6 @@ def NewCustomerProfile(request):
             return redirect('customer_list')
 
     return render(request, 'accounts/new_customer_profile.html', {'user_form': user_form, 'customer_form': customer_form})
-
-# The view above allows the admin user to generate an instance of customer
 
 
 @login_required(login_url='login')
@@ -219,14 +222,18 @@ def product_list(request):
 @login_required(login_url='login')
 def EditProduct(request, pk):
 
+    # Below shows total amount of ordered products is established as a value within in order_total
+
     order_total = list(Order.objects.filter(
         product__id=pk).aggregate(Sum('order_required')).values())[0]
 
-# The total amount of ordered products is established as a value within in order_total
+# Below is the total amount spent in value per product based on its regular price on each instance of order generated
 
     total_value_of_orders = list(Order.objects.filter(
         product__id=pk).aggregate(Sum('total_cost_per_order')).values())[0]
-# The total amount spent in value per product based on its regular price on each instance of order generated
+
+# The last ordered date is intended to display the recent created instance based upon the order model, based on the selected instance of the product.
+
     try:
         last_ordered_date = list(Order.objects.all().values_list(
             'date_created').filter(product__id=pk).latest())[0]
@@ -239,12 +246,15 @@ def EditProduct(request, pk):
     if request.method == 'POST':
         form = ProductForm(request.POST, instance=product)
         if form.is_valid():
+
             form.save()
             return redirect('product_list')
 
     context = {'form': form, 'order_total': order_total,
                'total_value_of_orders': total_value_of_orders, 'last_ordered_date': last_ordered_date}
     return render(request, 'accounts/edit_product_profile.html', context)
+
+# The view below allows the user to delete the selected product instance
 
 
 @login_required(login_url='login')
@@ -259,9 +269,11 @@ def DeleteProductProfile(request, pk):
 
 @login_required(login_url='login')
 def ProductPicture(request, pk):
+    # The inlineformset below shows when uploading the image for the product_pic field
 
     PictureFormSet = inlineformset_factory(
         Product, Picture, fields=('product_pic',), extra=10)
+
     product = Product.objects.get(id=pk)
     formset = PictureFormSet(queryset=Picture.objects.none(), instance=product)
     picture = Picture.objects.select_related('product')
@@ -277,11 +289,12 @@ def ProductPicture(request, pk):
 
 @login_required(login_url='login')
 def Address(request, pk):
-    # user_form = RegisterForm()
+
+    # The address form allows the user to updated instances based upon the customer model which allows the user to extend the customer instance
     address = Customer.objects.get(id=pk)
     address_form = AddressUpdate(instance=address)
     if request.method == 'POST':
-        # user_form = RegisterForm(request.POST)
+
         address_form = AddressUpdate(request.POST, instance=address)
 
         if address_form.is_valid():
@@ -295,8 +308,9 @@ def Address(request, pk):
 @login_required(login_url='login')
 def orderList(request):
 
+    # The order list view allows the user to view the list of order instances
     order_list = Order.objects.all().order_by('id')
-
+# myfilter3 allows the user to filter through instances to search through with in the template
     myFilter3 = OrderListFilter(request.GET, queryset=order_list)
 
     order_list = myFilter3.qs
@@ -308,6 +322,8 @@ def orderList(request):
 
 @login_required
 def newOrder(request):
+    # This view will allow user to create instances of based upon the order model
+
     form = CreateOrderForm()
     if request.method == 'POST':
         form = CreateOrderForm(request.POST or None)
@@ -321,13 +337,14 @@ def newOrder(request):
 @login_required
 def editOrder(request, pk=None):
     order = get_object_or_404(Order, id=pk)
+# Below will show the date of when the order instance is generated
 
     try:
         order_date = list(Order.objects.all().values_list(
             'date_created').filter(id=pk))[0][0]
     except Order.DoesNotExist:
         order_date = None
-
+# The below will allow the user to update the instance of the order
     form = CreateOrderForm(instance=order)
 
     if request.method == "POST":
@@ -338,7 +355,7 @@ def editOrder(request, pk=None):
 
     return render(request, 'accounts/edit_order.html', {'form': form, 'order_date': order_date})
 
-
+# The view below will allow the order instance to be deleted by the user
 @login_required(login_url='login')
 def DeleteOrder(request, pk):
     order = Order.objects.get(id=pk)

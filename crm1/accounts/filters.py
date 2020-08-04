@@ -7,26 +7,7 @@ from crispy_forms.layout import Layout, Submit, Row, Column
 
 from .models import *
 
-
-class OrderFilter(django_filters.FilterSet):
-    start_date = DateFilter(field_name="date_created", lookup_expr='gte')
-    end_date = DateFilter(field_name="date_created", lookup_expr='lte')
-    note = CharFilter(field_name='note', lookup_expr='icontains')
-
-    class Meta:
-        model = Order
-        fields = '__all__'
-        exclude = ['customer', 'date_created']
-
-
-class ProductFilter(django_filters.FilterSet):
-    name = CharFilter(field_name='name', lookup_expr='icontains')
-    category = CharFilter(field_name='category', lookup_expr='icontains')
-
-    class Meta:
-        model = Product
-        field = '__all__'
-        exclude = ['start_date', 'end_date']
+# The filter class below is based upon the customer model, which will allow the user to filter through the  instances of the customer model
 
 
 class CustomerlistFilter(django_filters.FilterSet):
@@ -38,6 +19,7 @@ class CustomerlistFilter(django_filters.FilterSet):
         model = Customer
         fields = ['q']
 
+# The function below is intended to allow the user to filter through the basis of the fields of the customer as shown
     def my_custom_filter(self, queryset, name, value):
         return Customer.objects.filter(
             Q(id__icontains=value)
@@ -45,6 +27,8 @@ class CustomerlistFilter(django_filters.FilterSet):
             | Q(middle_name__icontains=value)
             | Q(last_name__icontains=value)
         )
+
+# The filter class below is based upon the product model, which will allow the user to filter through the instances of the product model
 
 
 class ProductListFilter(django_filters.FilterSet):
@@ -56,11 +40,15 @@ class ProductListFilter(django_filters.FilterSet):
         model = Product
         fields = ['q1']
 
+# The function below is intended to allow the user to filter through the basis of the fields of the product as shown
+
     def my_custom_product_filter(self, queryset, name, value):
         return Product.objects.filter(
             Q(product_sku__icontains=value)
             | Q(name__icontains=value))
 
+
+# The filter class below is based upon the order model, which will allow the user to filter through the instances of the order model
 
 class OrderListFilter(django_filters.FilterSet):
 
@@ -70,6 +58,8 @@ class OrderListFilter(django_filters.FilterSet):
     class Meta:
         model = Order
         fields = ['q2']
+
+# The function below is intended to allow the user to filter through the basis of the fields of the order as shown
 
     def my_custom_order_filter(self, queryset, name, value):
         return Order.objects.filter(
