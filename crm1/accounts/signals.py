@@ -24,12 +24,12 @@ def total_cost(sender, instance, created, **kwargs):
 # when the superuser is created via terminal, below will allow to extend the user towards the customer model
 
 
-@receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        Customer.objects.get_or_create(user=instance)
+# @receiver(post_save, sender=User)
+# def create_user_profile(sender, instance, created, **kwargs):
+ #   if created:
+  #      Customer.objects.get_or_create(user=instance)
 
 
-@receiver(post_save, sender=User)
-def save_user_customer(sender, instance, **kwargs):
-    instance.customer.save()
+# @receiver(post_save, sender=User)
+# def save_user_customer(sender, instance, **kwargs):
+ #   instance.customer.save()
