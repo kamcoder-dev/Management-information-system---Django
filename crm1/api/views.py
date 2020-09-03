@@ -9,7 +9,7 @@ from rest_framework.response import Response
 from accounts.models import Product, Customer, User
 from knox.models import AuthToken
 
-from .serializers import CustomerSerializer, UserSerializer, LoginSerializer
+from .serializers import CustomerSerializer, UserSerializer, LoginSerializer, ProductList
 
 # Register API
 
@@ -54,3 +54,10 @@ class UserAPI(generics.RetrieveAPIView):
 
     def get_object(self):
         return self.request.user
+
+
+# ProductList API, it will be rendered and displayed on the front end page
+
+class ProductListAPI(generics.ListAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductList

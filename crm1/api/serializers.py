@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import authenticate
 
-from accounts.models import Customer, User
+from accounts.models import Customer, User, Product
 
 
 # Customer Serializers
@@ -77,3 +77,9 @@ class LoginSerializer(serializers.Serializer):
         if user and user.is_active:
             return user
         raise serializers.ValidationError("Wrong Details Entered")
+
+
+class ProductList(serializers.ModelSerializer):
+    class Meta:
+        fields = ('name', 'category', 'description', 'r_price')
+        model = Product
