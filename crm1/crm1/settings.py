@@ -37,6 +37,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'accounts.apps.AccountsConfig',
+    'api.apps.ApiConfig',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'rest_auth',
+    'knox',
     'django_filters',
     'import_export',
     'django_countries',
@@ -44,6 +49,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'activatable_model',
     "bootstrap4",
+    "corsheaders",
 
 
 ]
@@ -139,3 +145,18 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
 
 AUTH_USER_MODEL = 'accounts.User'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',),
+    'DATETIME_FORMAT': "%m/%d/%Y %H:%M:%S",
+    # 'DEFAULT_PERMISSION_CLASSES': (
+    #   'rest_framework.permissions.AllowAny'
+    # ),
+}
+
+
+CORS_ORIGIN_WHITELIST = (
+    'http://localhost:3000',
+    'http://localhost:8000',
+
+)
